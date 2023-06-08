@@ -1,23 +1,31 @@
 import Head from "next/head"
 import Card from "@/components/Card"
+import Button from "@/components/Button"
+import Image from "next/image"
+import DropDown from "@/components/Dropdown"
+import FeedBackButton from "@/components/FeedBackButton"
+import CardFeedback from "@/components/CardFeedback"
+import { getLocalData } from '../lib/localdata'
 
-export default function Home() {
-  const activeBtnClass = 'text-white bg-dark-blue'
+export async function getStaticProps() {
+  const feedbackData = await getLocalData()
+  return {props: {feedbackData}}
+}
 
+export default function Home({ feedbackData }) {
   return (
     <>
       <Head>
         <title>Feedback Board</title>
       </Head>
-
       <div className="bg-light-cream">
-        <main className="max-w-screen-xl mx-auto h-screen sm:pt-3">
+        <main className="max-w-screen-xl mx-auto md:pt-4">
           <div className="gap-6 md:flex sm:mx-3">
 
             <header className="md:w-1/4">
               
-              <div className="mb-4 sm:grid sm:grid-cols-3 sm:gap-3 md:block">
-                <div className="logo-bg sm:rounded-md overflow-hidden bg-white sm:mt-4 md:mt-0">
+              <div className="sm:mb-4 sm:mt-4 md:mt-0 md:flex flex-col sm:grid sm:grid-cols-3 sm:gap-3">
+                <div className="logo-bg sm:rounded-lg overflow-hidden bg-white">
                   <div className="p-4 flex items-center">
                     <div>
                       <h1 className="text-white font-bold text-lg sm:mt-5">Frontend Mentor</h1>
@@ -31,30 +39,18 @@ export default function Home() {
                   </div>
                 </div>
 
-                <Card>
+                <Card hideOnMobile={true}>
                   <div className="flex flex-wrap gap-3">
-                    <button className={`px-3 py-1 bg-cream rounded-md text-dark-blue hover:bg-hover ${activeBtnClass}`}>
-                      <p className="text-sm font-bold">All</p>
-                    </button>
-                    <button className="px-3 py-1 bg-cream rounded-md text-dark-blue hover:bg-hover">
-                      <p className="text-sm font-bold">UI</p>
-                    </button>
-                    <button className="px-3 py-1 bg-cream rounded-md text-dark-blue hover:bg-hover">
-                      <p className="text-sm font-bold">UX</p>
-                    </button>
-                    <button className="px-3 py-1 bg-cream rounded-md text-dark-blue hover:bg-hover">
-                      <p className="text-sm font-bold">Enhancement</p>
-                    </button>
-                    <button className="px-3 py-1 bg-cream rounded-md text-dark-blue hover:bg-hover">
-                      <p className="text-sm font-bold">Bug</p>
-                    </button>
-                    <button className="px-3 py-1 bg-cream rounded-md text-dark-blue hover:bg-hover">
-                      <p className="text-sm font-bold">Features</p>
-                    </button>
+                    <Button value={'All'} active={true}/>
+                    <Button value={'UI'} active={false}/>
+                    <Button value={'UX'} active={false}/>
+                    <Button value={'Enhancement'} active={false}/>
+                    <Button value={'Bug'} active={false}/>
+                    <Button value={'Features'} active={false}/>
                   </div>
                 </Card>
 
-                <Card>
+                <Card hideOnMobile={true}>
                   <div className="flex justify-between mb-2">
                     <h3 className="font-bold text-md text-dark-grey">Roadmap</h3>
                     <a href="/" className="underline text-sm text-dark-blue hover:text-light-blue">View</a>
@@ -87,8 +83,33 @@ export default function Home() {
               
             </header>
 
-            <div className="border border-md border-green-500 md:w-3/4">
-              main content
+            <div className="md:w-3/4">
+              <Card backgroundColor={'dark'} roundedOnSmallScreen={true}>
+                <div className="flex items-center">
+                  <Image 
+                    src="images/bulb.svg" 
+                    width={24}
+                    height={24}
+                    alt="Bulb"  
+                    className="mr-4 hidden sm:block"
+                  />
+                  <p className="mr-6 font-bold hidden sm:block">6 Suggestions</p>
+                  <div>
+                    <label className="mr-1 hidden sm:inline-block" htmlFor="cars">Sort by:</label>
+                    <DropDown />
+                  </div>
+
+                  <div className="ml-auto">
+                    <FeedBackButton />
+                  </div>
+                </div>
+              </Card>
+
+              <div className="flex flex-col gap-4 mt-3 mx-2 sm:mx-0">
+                {feedbackData.map(data => (
+                  <CardFeedback key={data.heading} category={data.category} upvoteNumber={data.numberOfUpvotes} heading={data.heading} body={data.body} commentsNumber={data.numberOfComments} />
+                ))}
+              </div>
             </div>
 
           </div>

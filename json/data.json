@@ -1,0 +1,79 @@
+[
+    {
+        "heading": "Add tags for solutions",
+        "body": "Easier to search for solutions based on specific task.",
+        "numberOfComments": "2",
+        "numberOfUpvotes": "46",
+        "category": "Enhancement"
+    },
+    {
+        "heading": "Improve Login Button Placement",
+        "body": "The login button is currently hard to find. It would be helpful if it could be placed more prominently on the homepage.",
+        "numberOfComments": "5",
+        "numberOfUpvotes": "15",
+        "category": "UI"
+      },
+      {
+        "heading": "Optimize Image Loading Speed",
+        "body": "Images take too long to load on the website. It would be great if the loading speed could be improved.",
+        "numberOfComments": "8",
+        "numberOfUpvotes": "23",
+        "category": "Enhancement"
+      },
+      {
+        "heading": "Fix Navigation Menu Alignment",
+        "body": "The navigation menu is misaligned on mobile devices. It needs to be adjusted to ensure proper display.",
+        "numberOfComments": "3",
+        "numberOfUpvotes": "12",
+        "category": "UI"
+      },
+      {
+        "heading": "Dark Mode Support",
+        "body": "It would be great if the application could provide a dark mode option for users who prefer dark-themed interfaces.",
+        "numberOfComments": "10",
+        "numberOfUpvotes": "35",
+        "category": "Enhancement"
+      },
+      {
+        "heading": "Incorrect Date Display",
+        "body": "The date is displaying incorrectly in certain sections of the application. This issue needs to be resolved.",
+        "numberOfComments": "2",
+        "numberOfUpvotes": "8",
+        "category": "Bug"
+      },
+      {
+        "heading": "Add Multi-language Support",
+        "body": "To cater to a wider audience, it would be beneficial to have support for multiple languages in the application.",
+        "numberOfComments": "7",
+        "numberOfUpvotes": "21",
+        "category": "Feature"
+      },
+      {
+        "heading": "Improve Loading Time on Large Datasets",
+        "body": "When dealing with large datasets, the application experiences significant loading delays. This needs to be addressed for better performance.",
+        "numberOfComments": "4",
+        "numberOfUpvotes": "18",
+        "category": "Enhancement"
+      },
+      {
+        "heading": "Enhance Button Styling",
+        "body": "The buttons in the application lack visual appeal. They should be redesigned to have a more modern and attractive appearance.",
+        "numberOfComments": "6",
+        "numberOfUpvotes": "14",
+        "category": "UI"
+      },
+      {
+        "heading": "Incorrect Calculation in Reports",
+        "body": "The calculations in the reports section are producing inaccurate results. This bug needs to be fixed for accurate data analysis.",
+        "numberOfComments": "9",
+        "numberOfUpvotes": "27",
+        "category": "Bug"
+      },
+      {
+        "heading": "Integration with Social Media Platforms",
+        "body": "It would be beneficial to integrate the application with popular social media platforms to allow users to share content seamlessly.",
+        "numberOfComments": "12",
+        "numberOfUpvotes": "32",
+        "category": "Feature"
+      }
+]

@@ -1,6 +1,10 @@
-export default function Card({children}) {
+export default function Card({children, hideOnMobile, backgroundColor, roundedOnSmallScreen}) {
+    let hideOnMobileClass = hideOnMobile ? 'sm:block hidden' : ''
+    let backgroundColorClass = backgroundColor == 'dark' ? 'bg-slate text-white' : 'bg-white';
+    let roundedClass = roundedOnSmallScreen ? 'sm:rounded-lg' : 'rounded-lg'
+
     return (
-        <div className="sm:block hidden rounded-md overflow-hidden bg-white mt-4 p-4">
+        <div className={`overflow-hidden p-4 ${backgroundColorClass} ${hideOnMobileClass} ${roundedClass}`}>
             {children}
         </div>
     )

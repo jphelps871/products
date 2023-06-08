@@ -22,7 +22,11 @@ module.exports = {
         'cream': '#F2F4FF',
         'light-cream': '#F7F8FD',
         'orange': '#F49F85',
-        'hover': '#CFD7FF'
+        'hover': '#CFD7FF',
+        'hover-feedback': '#C75AF6'
+      },
+      gridTemplateColumns: {
+        'feedback-card': '1fr 9fr 1fr',
       }
     },
   },
