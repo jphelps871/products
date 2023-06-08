@@ -17,7 +17,7 @@ export default function CardFeedback({category, upvoteNumber, heading, body, com
                 </section>
 
                 <div className="flex items-center ml-4 order-3 sm:order-none ml-auto sm:ml-0 sm:ml-4">
-                    <Image src={'images/comment-icon.svg'} width={'20'} height={'20'} alt={'Comment icon'} />
+                    <Image src={'/images/comment-icon.svg'} width={'20'} height={'20'} alt={'Comment icon'} />
                     <p className="ml-2 font-bold">{commentsNumber}</p>
                 </div>
             </div>

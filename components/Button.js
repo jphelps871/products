@@ -10,7 +10,7 @@ export default function Button({value, active, upvote}) {
             {upvote && (
                 <div className="text-center">
                     <Image 
-                        src={'images/upvote-icon.svg'}
+                        src={'/images/upvote-icon.svg'}
                         width={12}
                         height={12}
                         alt="Up icon"

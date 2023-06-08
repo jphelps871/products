@@ -5,7 +5,8 @@ import Image from "next/image"
 import DropDown from "@/components/Dropdown"
 import FeedBackButton from "@/components/FeedBackButton"
 import CardFeedback from "@/components/CardFeedback"
-import { getLocalData } from '../lib/localdata'
+import Link from "next/link"
+import { getLocalData } from '../lib/localData'
 
 export async function getStaticProps() {
   const feedbackData = await getLocalData()
@@ -18,7 +19,6 @@ export default function Home({ feedbackData }) {
       <Head>
         <title>Feedback Board</title>
       </Head>
-      <div className="bg-light-cream">
         <main className="max-w-screen-xl mx-auto md:pt-4">
           <div className="gap-6 md:flex sm:mx-3">
 
@@ -100,21 +100,22 @@ export default function Home({ feedbackData }) {
                   </div>
 
                   <div className="ml-auto">
-                    <FeedBackButton />
+                    <FeedBackButton bgColor={'dark-purple'} />
                   </div>
                 </div>
               </Card>
 
               <div className="flex flex-col gap-4 mt-3 mx-2 sm:mx-0">
                 {feedbackData.map(data => (
-                  <CardFeedback key={data.heading} category={data.category} upvoteNumber={data.numberOfUpvotes} heading={data.heading} body={data.body} commentsNumber={data.numberOfComments} />
+                  <Link key={data.id} href={`/comments/${data.id}`}>
+                    <CardFeedback category={data.category} upvoteNumber={data.numberOfUpvotes} heading={data.heading} body={data.body} commentsNumber={data.numberOfComments} />
+                  </Link>
                 ))}
               </div>
             </div>
 
           </div>
         </main>
-      </div>
     </>
   )
 }

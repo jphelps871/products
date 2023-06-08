@@ -1,79 +1,330 @@
 [
-    {
-        "heading": "Add tags for solutions",
-        "body": "Easier to search for solutions based on specific task.",
-        "numberOfComments": "2",
-        "numberOfUpvotes": "46",
-        "category": "Enhancement"
-    },
-    {
-        "heading": "Improve Login Button Placement",
-        "body": "The login button is currently hard to find. It would be helpful if it could be placed more prominently on the homepage.",
-        "numberOfComments": "5",
-        "numberOfUpvotes": "15",
-        "category": "UI"
+  {
+    "id": "1",
+    "heading": "Improve Login Button Placement",
+    "body": "The login button is currently hard to find. It would be helpful if it could be placed more prominently on the homepage.",
+    "numberOfComments": 5,
+    "numberOfUpvotes": 15,
+    "category": "UI",
+    "comments": [
+      {
+        "user": "John",
+        "comment": "I agree, the login button is difficult to locate. It should be more prominent."
       },
       {
-        "heading": "Optimize Image Loading Speed",
-        "body": "Images take too long to load on the website. It would be great if the loading speed could be improved.",
-        "numberOfComments": "8",
-        "numberOfUpvotes": "23",
-        "category": "Enhancement"
+        "user": "Emily",
+        "comment": "I think moving the login button to the top right corner would be a good solution."
       },
       {
-        "heading": "Fix Navigation Menu Alignment",
-        "body": "The navigation menu is misaligned on mobile devices. It needs to be adjusted to ensure proper display.",
-        "numberOfComments": "3",
-        "numberOfUpvotes": "12",
-        "category": "UI"
+        "user": "Michael",
+        "comment": "How about using a contrasting color for the login button to make it stand out?"
       },
       {
-        "heading": "Dark Mode Support",
-        "body": "It would be great if the application could provide a dark mode option for users who prefer dark-themed interfaces.",
-        "numberOfComments": "10",
-        "numberOfUpvotes": "35",
-        "category": "Enhancement"
+        "user": "Sophia",
+        "comment": "I believe adding a subtle animation to the login button would make it more noticeable."
       },
       {
-        "heading": "Incorrect Date Display",
-        "body": "The date is displaying incorrectly in certain sections of the application. This issue needs to be resolved.",
-        "numberOfComments": "2",
-        "numberOfUpvotes": "8",
-        "category": "Bug"
-      },
-      {
-        "heading": "Add Multi-language Support",
-        "body": "To cater to a wider audience, it would be beneficial to have support for multiple languages in the application.",
-        "numberOfComments": "7",
-        "numberOfUpvotes": "21",
-        "category": "Feature"
-      },
-      {
-        "heading": "Improve Loading Time on Large Datasets",
-        "body": "When dealing with large datasets, the application experiences significant loading delays. This needs to be addressed for better performance.",
-        "numberOfComments": "4",
-        "numberOfUpvotes": "18",
-        "category": "Enhancement"
-      },
-      {
-        "heading": "Enhance Button Styling",
-        "body": "The buttons in the application lack visual appeal. They should be redesigned to have a more modern and attractive appearance.",
-        "numberOfComments": "6",
-        "numberOfUpvotes": "14",
-        "category": "UI"
-      },
-      {
-        "heading": "Incorrect Calculation in Reports",
-        "body": "The calculations in the reports section are producing inaccurate results. This bug needs to be fixed for accurate data analysis.",
-        "numberOfComments": "9",
-        "numberOfUpvotes": "27",
-        "category": "Bug"
-      },
-      {
-        "heading": "Integration with Social Media Platforms",
-        "body": "It would be beneficial to integrate the application with popular social media platforms to allow users to share content seamlessly.",
-        "numberOfComments": "12",
-        "numberOfUpvotes": "32",
-        "category": "Feature"
+        "user": "Daniel",
+        "comment": "The current placement of the login button is confusing for new users. It needs improvement."
       }
+    ]
+  },
+  {
+    "id": "2",
+    "heading": "Optimize Image Loading Speed",
+    "body": "Images take too long to load on the website. It would be great if the loading speed could be improved.",
+    "numberOfComments": 8,
+    "numberOfUpvotes": 23,
+    "category": "Enhancement",
+    "comments": [
+      {
+        "user": "Amy",
+        "comment": "I've noticed the slow image loading as well. It's frustrating when browsing the site."
+      },
+      {
+        "user": "David",
+        "comment": "Are the images properly optimized? Optimizing them could significantly improve loading speed."
+      },
+      {
+        "user": "Olivia",
+        "comment": "Maybe utilizing a content delivery network (CDN) could help speed up image loading."
+      },
+      {
+        "user": "William",
+        "comment": "Is lazy loading implemented? Lazy loading images could enhance the overall performance."
+      },
+      {
+        "user": "Ava",
+        "comment": "I think compressing the images without sacrificing quality might be a good solution."
+      },
+      {
+        "user": "Liam",
+        "comment": "Have you considered using progressive image loading techniques?"
+      },
+      {
+        "user": "Emma",
+        "comment": "Optimizing image formats to more efficient ones, like WebP, could improve loading speed."
+      },
+      {
+        "user": "Noah",
+        "comment": "Have you checked the server response times? Slow server response can impact image loading."
+      }
+    ]
+  },
+  {
+    "id": "3",
+    "heading": "Fix Navigation Menu Alignment",
+    "body": "The navigation menu is misaligned on mobile devices. It needs to be adjusted to ensure proper display.",
+    "numberOfComments": 3,
+    "numberOfUpvotes": 12,
+    "category": "UI",
+    "comments": [
+      {
+        "user": "Sophia",
+        "comment": "The misalignment of the navigation menu is causing inconvenience. It should be fixed as soon as possible."
+      },
+      {
+        "user": "Ethan",
+        "comment": "I suggest using a responsive design approach to handle the alignment on different screen sizes."
+      },
+      {
+        "user": "Isabella",
+        "comment": "Testing the navigation menu on various mobile devices and resolving alignment issues is crucial for a seamless user experience."
+      }
+    ]
+  },
+  {
+    "id": "4",
+    "heading": "Enhancement: Dark Mode Support",
+    "body": "It would be great if the application could provide a dark mode option for users who prefer dark-themed interfaces.",
+    "numberOfComments": 10,
+    "numberOfUpvotes": 35,
+    "category": "Enhancement",
+    "comments": [
+      {
+        "user": "Mason",
+        "comment": "Dark mode has become a popular feature. Implementing it would attract more users."
+      },
+      {
+        "user": "Sophia",
+        "comment": "I personally find dark mode easier on the eyes, especially during nighttime browsing."
+      },
+      {
+        "user": "Logan",
+        "comment": "Consider adding an option to switch between automatic and manual dark mode based on system preferences."
+      },
+      {
+        "user": "Ava",
+        "comment": "The dark mode should have proper contrast ratios to ensure readability of text and elements."
+      },
+      {
+        "user": "William",
+        "comment": "A toggle switch in the settings menu could allow users to easily enable or disable dark mode."
+      },
+      {
+        "user": "Charlotte",
+        "comment": "When implementing dark mode, make sure to test it across different platforms and browsers for consistency."
+      },
+      {
+        "user": "Michael",
+        "comment": "Dark mode is a must-have feature nowadays. It adds a modern touch to the application."
+      },
+      {
+        "user": "Olivia",
+        "comment": "Consider allowing users to schedule dark mode activation based on their preferred timings."
+      },
+      {
+        "user": "James",
+        "comment": "Dark mode can enhance battery life for devices with OLED or AMOLED screens."
+      },
+      {
+        "user": "Sophia",
+        "comment": "I'd love to see a customizable dark mode with options for different color schemes."
+      }
+    ]
+  },
+  {
+    "id": "5",
+    "heading": "Bug: Incorrect Date Display",
+    "body": "The date is displaying incorrectly in certain sections of the application. This issue needs to be resolved.",
+    "numberOfComments": 2,
+    "numberOfUpvotes": 8,
+    "category": "Bug",
+    "comments": [
+      {
+        "user": "Emma",
+        "comment": "The incorrect date display can lead to confusion and inaccuracies. Fixing it should be a priority."
+      },
+      {
+        "user": "Liam",
+        "comment": "Check the date formatting settings and ensure they are consistent across the application."
+      }
+    ]
+  },
+  {
+    "id": "6",
+    "heading": "Add Multi-language Support",
+    "body": "To cater to a wider audience, it would be beneficial to have support for multiple languages in the application.",
+    "numberOfComments": 7,
+    "numberOfUpvotes": 21,
+    "category": "Feature",
+    "comments": [
+      {
+        "user": "Noah",
+        "comment": "Supporting multiple languages can significantly expand the user base."
+      },
+      {
+        "user": "Sophia",
+        "comment": "Translation plugins or APIs can be utilized for easy integration of multi-language support."
+      },
+      {
+        "user": "Liam",
+        "comment": "Remember to design the UI with localization in mind to accommodate text expansion and RTL languages."
+      },
+      {
+        "user": "Olivia",
+        "comment": "Allowing users to switch languages from the settings menu would be convenient."
+      },
+      {
+        "user": "William",
+        "comment": "Consider providing an option for users to contribute translations to improve language support."
+      },
+      {
+        "user": "Emily",
+        "comment": "Localization is crucial for global accessibility and better user engagement."
+      },
+      {
+        "user": "Mason",
+        "comment": "Keep in mind that each language may have different date, time, and number formats."
+      }
+    ]
+  },
+  {
+    "id": "7",
+    "heading": "Improve Loading Time on Large Datasets",
+    "body": "When dealing with large datasets, the application experiences significant loading delays. This needs to be addressed for better performance.",
+    "numberOfComments": 4,
+    "numberOfUpvotes": 18,
+    "category": "Enhancement",
+    "comments": [
+      {
+        "user": "Sophia",
+        "comment": "Optimizing data fetching and implementing pagination could improve loading time for large datasets."
+      },
+      {
+        "user": "Oliver",
+        "comment": "Consider implementing data caching to minimize repetitive data retrieval and speed up loading."
+      },
+      {
+        "user": "Mia",
+        "comment": "Are there any database indexing strategies in place to optimize querying large datasets?"
+      },
+      {
+        "user": "Daniel",
+        "comment": "Lazy loading or infinite scrolling could help load large datasets gradually and improve overall performance."
+      }
+    ]
+  },
+  {
+    "id": "8",
+    "heading": "UI: Enhance Button Styling",
+    "body": "The buttons in the application lack visual appeal. They should be redesigned to have a more modern and attractive appearance.",
+    "numberOfComments": 6,
+    "numberOfUpvotes": 14,
+    "category": "UI",
+    "comments": [
+      {
+        "user": "Olivia",
+        "comment": "The buttons play a crucial role in the user interface. Improving their visual design would enhance the overall user experience."
+      },
+      {
+        "user": "Ethan",
+        "comment": "Consider adding subtle hover effects to the buttons for better interactivity."
+      },
+      {
+        "user": "Sophia",
+        "comment": "Using contrasting colors and modern typography can make the buttons more visually appealing."
+      },
+      {
+        "user": "Ava",
+        "comment": "Button animations or transitions could add a touch of sophistication to the user interface."
+      },
+      {
+        "user": "Lucas",
+        "comment": "Ensure that the button styles are consistent across different sections of the application."
+      },
+      {
+        "user": "Emily",
+        "comment": "Conduct user testing to gather feedback on the new button design and iterate accordingly."
+      }
+    ]
+  },
+  {
+    "id": "9",
+    "heading": "Bug: Incorrect Calculation in Reports",
+    "body": "The calculations in the reports section are producing inaccurate results. This bug needs to be fixed for accurate data analysis.",
+    "numberOfComments": 9,
+    "numberOfUpvotes": 27,
+    "category": "Bug",
+    "comments": [
+      {
+        "user": "Oliver",
+        "comment": "Inaccurate calculations can lead to wrong decision-making. It's crucial to fix this bug as soon as possible."
+      },
+      {
+        "user": "Ethan",
+        "comment": "Check the formulas and logic used for calculations to identify the source of the inaccuracies."
+      },
+      {
+        "user": "Isabella",
+        "comment": "Creating unit tests for the calculation functions could help identify and fix the inaccuracies."
+      },
+      {
+        "user": "Mason",
+        "comment": "Consider involving domain experts to verify the accuracy of the calculations in the reports."
+      },
+      {
+        "user": "Charlotte",
+        "comment": "Thoroughly validate the input data used for calculations to ensure accuracy."
+      },
+      {
+        "user": "William",
+        "comment": "Logging and analyzing the intermediate calculation steps might provide insights into the source of the inaccuracies."
+      },
+      {
+        "user": "Sophia",
+        "comment": "Make sure to run regression tests after fixing the bug to avoid reintroducing the inaccuracies."
+      },
+      {
+        "user": "Aiden",
+        "comment": "Communicate the fix to users and provide them with accurate reports to rebuild trust in the application."
+      },
+      {
+        "user": "Emily",
+        "comment": "Perform thorough testing on different datasets to ensure the accuracy of the calculations."
+      }
+    ]
+  },
+  {
+    "id": "10",
+    "heading": "Feature: Integration with Social Media Platforms",
+    "body": "Allow users to connect their accounts with social media platforms for seamless sharing and social interactions.",
+    "numberOfComments": 3,
+    "numberOfUpvotes": 11,
+    "category": "Feature",
+    "comments": [
+      {
+        "user": "Noah",
+        "comment": "Integrating with social media platforms would enhance the user experience and increase engagement."
+      },
+      {
+        "user": "Emma",
+        "comment": "Consider providing options for users to selectively share content or disable automatic sharing."
+      },
+      {
+        "user": "Oliver",
+        "comment": "Ensure that the integration complies with the privacy policies and guidelines of the social media platforms."
+      }
+    ]
+  }
 ]
