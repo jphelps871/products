@@ -13,7 +13,7 @@ export default function CardFeedback({category, upvoteNumber, heading, body, com
                 <section className="grow order-1 sm:order-none col-span-2 sm:col-span-1">
                     <h3 className="mb-2 text-lg font-bold text-dark-grey">{heading}</h3>
                     <p className="mb-2 text-light-slate">{body}</p>
-                    <Button value={category} />
+                    <Button value={category} noHover={true} />
                 </section>
 
                 <div className="flex items-center ml-4 order-3 sm:order-none ml-auto sm:ml-0 sm:ml-4">

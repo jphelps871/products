@@ -1,12 +1,13 @@
 import Image from "next/image"
 
-export default function Button({value, active, upvote}) {
+export default function Button({value, active, upvote, noHover}) {
     let activeBtnClass = active ? 'text-white bg-dark-blue' : ''
     let upvoteClasses = upvote ? 'px-2 py-1 dark-grey' : 'px-4 py-2 text-dark-blue'
+    let hoverClass = noHover ? 'cursor-default' : 'hover:bg-hover'
 
 
     return (
-        <button className={`bg-cream rounded-lg hover:bg-hover ${activeBtnClass} ${upvoteClasses}`}>
+        <button className={`bg-cream rounded-lg ${hoverClass} ${activeBtnClass} ${upvoteClasses}`}>
             {upvote && (
                 <div className="text-center">
                     <Image 
