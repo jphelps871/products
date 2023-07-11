@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Card from '@/components/Card'
 import CardFeedback from '@/components/CardFeedback'
 import FeedBackButton from "@/components/FeedBackButton"
+import Comment from '@/components/Comment'
 import Avatar from '@/components/Avatar'
 
 export async function getStaticPaths() {
@@ -22,20 +23,6 @@ export async function getStaticProps({params}) {
 export default function CommentPage({feedback}) {
     const comments = feedback.comments
     const numberOfComments = comments.length
-
-    /*
-        Loop though each parent comment, and within each parent loop through the
-        child comments. We need to create an object like structure for this example:
-        {
-            comment: {
-                children: [
-                    {
-                        
-                    }
-                ]
-            }
-        }
-    */
 
     return (
         <>
@@ -62,34 +49,22 @@ export default function CommentPage({feedback}) {
                         <p className='font-bold text-dark-grey text-xl'>{numberOfComments} Comments</p>
 
                         {comments.map(comment => (
-                            <div key={comment.user} className='flex gap-3 mt-5 mb-8 border-b-2 border-gray-100'>
-                                <div>
-                                    <Avatar/>
-                                </div>
-                                <div className='grow mb-4'>
-                                    <div className='flex justify-between'>
-                                        <div className='mb-5'>
-                                            <p className='font-bold text-dark-grey text-lg'>
-                                                {comment.user}
-                                            </p>
-                                            <p className='text-light-slate'>
-                                                @{comment.username}
-                                            </p>
-                                        </div>
-                                        <a className='text-sm font-bold text-dark-blue hover:underline cursor-pointer'>
-                                            Reply
-                                        </a>
-                                    </div>
-                                    <p className='text-light-slate'>
-                                        {comment.comment}
-                                    </p>
-                                </div>
-                            </div>
+                            <Comment key={comment.id} comment={comment} />
                         ))}
+                    </Card>
+                </div>
+                <div className='mt-10 mb-20'>
+                    <Card>
+                        <p className='font-bold text-dark-grey text-xl mb-8'>Add Comment</p>
+
+                        <form action="/api/comment" method="post">
+                            <label htmlFor="comment">Comment</label>
+                            <input type="text" id="comment" name="comment" />
+                            <button type="submit">Post Comment</button>
+                        </form>
                     </Card>
                 </div>
             </div>
         </>
-
     )
 }
