@@ -6,7 +6,7 @@ export default function CardFeedback({category, upvoteNumber, heading, body, com
     return (
         <Card>
             <div className="grid sm:grid-cols-feedback-card grid-cols-2 gap-5 sm:gap-0">
-                <div className="mr-8 order-2 sm:order-none">
+                <div className="order-2 sm:order-none">
                     <Button value={upvoteNumber} upvote={true} />
                 </div>
 

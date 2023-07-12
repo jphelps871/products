@@ -47,10 +47,10 @@ export default function CommentForm() {
                 rows="4" 
                 maxLength="250"
                 onKeyUp={(e) => characterCount(e)}
-                className='bg-light-cream rounded-md w-full p-4 text-form-text' />
+                className='bg-light-cream rounded-md w-full p-4 placeholder-form-text text-dark-grey' />
 
-            <div className='flex justify-between mt-4'>
-                <p className='text-form-text'>{characters} Characters left</p>
+            <div className='flex justify-between mt-4 items-center'>
+                <p className='text-form-text text-sm'>{characters} Characters left</p>
                 <FeedBackButton bgColor={'dark-purple'}>Post Comment</FeedBackButton>
             </div>
         </form>

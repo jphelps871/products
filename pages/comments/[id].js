@@ -63,7 +63,6 @@ export default function CommentPage({feedback}) {
                 <div className='mt-10 mb-20'>
                     <Card>
                         <p className='font-bold text-dark-grey text-xl mb-8'>Add Comment</p>
-
                         <CommentForm />
                     </Card>
                 </div>

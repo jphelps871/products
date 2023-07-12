@@ -9,10 +9,10 @@ export default function Comment({comment}) {
             <div className='grow mb-4'>
                 <div className='flex justify-between'>
                     <div className='mb-5'>
-                        <p className='font-bold text-dark-grey text-lg'>
+                        <p className='font-bold text-dark-grey text-md'>
                             {comment.user}
                         </p>
-                        <p className='text-light-slate'>
+                        <p className='text-light-slate text-sm'>
                             @{comment.username}
                         </p>
                     </div>
