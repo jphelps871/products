@@ -23,7 +23,8 @@ module.exports = {
         'light-cream': '#F7F8FD',
         'orange': '#F49F85',
         'hover': '#CFD7FF',
-        'hover-feedback': '#C75AF6'
+        'hover-feedback': '#C75AF6',
+        'form-text': '#8C92B3'
       },
       gridTemplateColumns: {
         'feedback-card': '1fr 9fr 1fr',

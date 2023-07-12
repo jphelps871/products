@@ -1,11 +1,11 @@
 import { createPathsObject, getFeedbackById } from '../../lib/localData'
 import Head from 'next/head'
+import CommentForm from '@/components/CommentForm'
 import Link from 'next/link'
 import Card from '@/components/Card'
 import CardFeedback from '@/components/CardFeedback'
 import FeedBackButton from "@/components/FeedBackButton"
 import Comment from '@/components/Comment'
-import Avatar from '@/components/Avatar'
 
 export async function getStaticPaths() {
     const pathObject = await createPathsObject()
@@ -40,11 +40,17 @@ export default function CommentPage({feedback}) {
                         </Link>
                     </div>
                     <div>
-                        <FeedBackButton bgColor={'dark-blue'} textContent={'Edit Feedback'}/>
+                        <FeedBackButton bgColor={'dark-blue'}>Edit Feedback</FeedBackButton>
                     </div>
                 </div>
                 <div className='flex flex-col gap-5 mt-5'>
-                    <CardFeedback category={feedback.category} upvoteNumber={feedback.numberOfUpvotes} heading={feedback.heading} body={feedback.body} commentsNumber={feedback.numberOfComments} />
+                    <CardFeedback 
+                        category={feedback.category} 
+                        upvoteNumber={feedback.numberOfUpvotes} 
+                        heading={feedback.heading} 
+                        body={feedback.body} 
+                        commentsNumber={feedback.numberOfComments} />
+
                     <Card>
                         <p className='font-bold text-dark-grey text-xl'>{numberOfComments} Comments</p>
 
@@ -53,15 +59,12 @@ export default function CommentPage({feedback}) {
                         ))}
                     </Card>
                 </div>
+
                 <div className='mt-10 mb-20'>
                     <Card>
                         <p className='font-bold text-dark-grey text-xl mb-8'>Add Comment</p>
 
-                        <form action="/api/comment" method="post">
-                            <label htmlFor="comment">Comment</label>
-                            <input type="text" id="comment" name="comment" />
-                            <button type="submit">Post Comment</button>
-                        </form>
+                        <CommentForm />
                     </Card>
                 </div>
             </div>

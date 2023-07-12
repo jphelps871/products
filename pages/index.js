@@ -100,7 +100,7 @@ export default function Home({ feedbackData }) {
                   </div>
 
                   <div className="ml-auto">
-                    <FeedBackButton bgColor={'dark-purple'} textContent={'Add Feedback'} />
+                    <FeedBackButton bgColor={'dark-purple'}>+ Add Feedback</FeedBackButton>
                   </div>
                 </div>
               </Card>

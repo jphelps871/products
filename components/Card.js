@@ -4,7 +4,7 @@ export default function Card({children, hideOnMobile, backgroundColor, roundedOn
     let roundedClass = roundedOnSmallScreen ? 'sm:rounded-lg' : 'rounded-lg'
 
     return (
-        <div className={`overflow-hidden p-4 ${backgroundColorClass} ${hideOnMobileClass} ${roundedClass}`}>
+        <div className={`overflow-hidden p-6 ${backgroundColorClass} ${hideOnMobileClass} ${roundedClass}`}>
             {children}
         </div>
     )
