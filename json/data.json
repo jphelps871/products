@@ -6,6 +6,7 @@
     "numberOfComments": 4,
     "numberOfUpvotes": 15,
     "category": "Feature",
+    "status": "planned",
     "comments": [
       {
         "id": "1",
@@ -40,6 +41,7 @@
     "numberOfComments": 8,
     "numberOfUpvotes": 23,
     "category": "Enhancement",
+    "status": "planned",
     "comments": [
       {
         "user": "Amy",
@@ -90,6 +92,7 @@
     "numberOfComments": 3,
     "numberOfUpvotes": 12,
     "category": "UI",
+    "status": "In progress",
     "comments": [
       {
         "user": "Sophia",
@@ -115,6 +118,7 @@
     "numberOfComments": 10,
     "numberOfUpvotes": 35,
     "category": "Enhancement",
+    "status": "In progress",
     "comments": [
       {
         "user": "Mason",
@@ -175,6 +179,7 @@
     "numberOfComments": 2,
     "numberOfUpvotes": 8,
     "category": "Bug",
+    "status": "In progress",
     "comments": [
       {
         "user": "Emma",
@@ -193,6 +198,7 @@
     "numberOfComments": 7,
     "numberOfUpvotes": 21,
     "category": "Feature",
+    "status": "In progress",
     "comments": [
       {
         "user": "Noah",
@@ -231,6 +237,7 @@
     "numberOfComments": 4,
     "numberOfUpvotes": 18,
     "category": "Enhancement",
+    "status": "In progress",
     "comments": [
       {
         "user": "Sophia",
@@ -257,6 +264,7 @@
     "numberOfComments": 6,
     "numberOfUpvotes": 14,
     "category": "UI",
+    "status": "Live",
     "comments": [
       {
         "user": "Olivia",
@@ -291,6 +299,7 @@
     "numberOfComments": 9,
     "numberOfUpvotes": 27,
     "category": "Bug",
+    "status": "Live",
     "comments": [
       {
         "user": "Oliver",
@@ -337,6 +346,7 @@
     "numberOfComments": 3,
     "numberOfUpvotes": 11,
     "category": "Feature",
+    "status": "In progress",
     "comments": [
       {
         "user": "Noah",

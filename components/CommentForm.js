@@ -12,15 +12,11 @@ export default function CommentForm() {
 
     async function handleCommentSubmit(event) {
         event.preventDefault();
-
         const data = {
             comment: event.target.comment.value
         }
-
         const JSONdata = JSON.stringify(data);
-
         const endpoint = '/api/comment';
-
         const options = {
             method: 'POST',
             headers: {
@@ -28,13 +24,11 @@ export default function CommentForm() {
             },
             body: JSONdata,
         }
-
         const response = await fetch(endpoint, options);
         const result = await response.json();
-
         if (response.status == 200) {
             event.target.childNodes[1].value = "";
-        }
+        } 
     }
 
     return (

@@ -19,7 +19,7 @@ export default function Home({ feedbackData }) {
       <Head>
         <title>Feedback Board</title>
       </Head>
-        <main className="max-w-screen-xl mx-auto md:pt-4">
+        <main className="max-w-screen-xl w-full sm:w-11/12 mx-auto md:pt-6">
           <div className="gap-6 md:flex sm:mx-3">
 
             <header className="md:w-1/4">
@@ -53,7 +53,7 @@ export default function Home({ feedbackData }) {
                 <Card hideOnMobile={true}>
                   <div className="flex justify-between mb-2">
                     <h3 className="font-bold text-md text-dark-grey">Roadmap</h3>
-                    <a href="/" className="underline text-sm text-dark-blue hover:text-light-blue">View</a>
+                    <a href="/roadmap" className="underline text-sm text-dark-blue hover:text-light-blue">View</a>
                   </div>
                   <div>
                     <div className="flex justify-between mb-1 text-light-slate">
@@ -84,7 +84,7 @@ export default function Home({ feedbackData }) {
             </header>
 
             <div className="md:w-3/4">
-              <Card backgroundColor={'dark'} roundedOnSmallScreen={true}>
+              <Card backgroundColor={'dark'} roundedOnSmallScreen={false}>
                 <div className="flex items-center">
                   <Image 
                     src="images/bulb.svg" 

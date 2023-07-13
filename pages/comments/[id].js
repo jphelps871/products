@@ -6,6 +6,7 @@ import Card from '@/components/Card'
 import CardFeedback from '@/components/CardFeedback'
 import FeedBackButton from "@/components/FeedBackButton"
 import Comment from '@/components/Comment'
+import BackLink from '@/components/BackLink'
 
 export async function getStaticPaths() {
     const pathObject = await createPathsObject()
@@ -32,12 +33,7 @@ export default function CommentPage({feedback}) {
             <div className='max-w-screen-md mx-auto pt-5 px-5 sm:pt-10'>
                 <div className='flex items-center justify-between'>
                     <div>
-                        <Link href={'/'} className='flex items-center'>
-                            <svg width="8" height="10" viewBox="0 0 8 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M6.33447 9L2.33447 5L6.33447 1" stroke="#4661E6" strokeWidth="2"/>
-                            </svg>
-                            <p className='text-light-slate font-bold ml-2 hover:underline'>Go Back</p>
-                        </Link>
+                        <BackLink />
                     </div>
                     <div>
                         <FeedBackButton bgColor={'dark-blue'}>Edit Feedback</FeedBackButton>
