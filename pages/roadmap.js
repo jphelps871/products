@@ -41,7 +41,7 @@ export default function Roadmap({ feedbackData }) {
 
     return (
         <div className="max-w-screen-xl w-full sm:w-11/12 mx-auto sm:pt-6">
-            <Card backgroundColor={'dark'} roundedOnSmallScreen={false}>
+            <Card tailwindStyles={'sm:rounded-lg bg-slate text-white'}>
                 <div className="flex items-center">
                     <div>
                         <BackLink color={"light"} />
@@ -55,19 +55,18 @@ export default function Roadmap({ feedbackData }) {
 
             {/* Tabs for mobile */}
             <div className="flex justify-evenly sm:hidden">
-                <button onClick={() => setActiveTab('planned')} className={`w-full p-5 font-bold text-dark-grey text-sm ${createActiveTab("planned", "orange")}`}>
+                <button onClick={() => setActiveTab('planned')} className={`w-full px-2 py-5 font-bold text-dark-grey text-sm ${createActiveTab("planned", "orange")}`}>
                     Planned ({feedbackData.planned.length})
                 </button>
-                <button onClick={() => setActiveTab('inProgress')} className={`w-full p-5 font-bold text-dark-grey text-sm ${createActiveTab("inProgress", "dark-purple")}`}>
+                <button onClick={() => setActiveTab('inProgress')} className={`w-full px-2 py-5 font-bold text-dark-grey text-sm ${createActiveTab("inProgress", "dark-purple")}`}>
                     In-Progress ({feedbackData.inProgress.length})
                 </button>
-                <button onClick={() => setActiveTab('live')} className={`w-full p-5 font-bold text-dark-grey text-sm ${createActiveTab("live", "light-blue")}`}>
+                <button onClick={() => setActiveTab('live')} className={`w-full px-2 py-5 font-bold text-dark-grey text-sm ${createActiveTab("live", "light-blue")}`}>
                     Live ({feedbackData.live.length})
                 </button>
             </div>
 
             <div className="mt-6 md:mt-8 flex gap-3 mx-2">
-
                 {/* Planned */}
                 <div className={`w-full ${activeTab !== 'planned' && 'hidden sm:block'}`}>
                     <div className="mb-4 md:mb-6">

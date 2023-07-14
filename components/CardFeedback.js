@@ -1,13 +1,13 @@
 import Card from "./Card";
 import Button from "./Button";
 import Image from "next/image";
-import UpvoteButton from "./upvoteButton";
+import UpvoteButton from "./UpvoteButton";
 
 export default function CardFeedback({category, upvoteNumber, heading, body, commentsNumber, roadmap}) {
     const responsiveClasses = roadmap ? false : true
 
     return (
-        <Card roundedBottom={roadmap ? true : false}>
+        <Card tailwindStyles={'bg-white rounded-lg'}>
             <div className={`grid grid-cols-2 gap-5 ${responsiveClasses && 'sm:grid-cols-feedback-card sm:gap-0'}`}>
                 <div className={`order-2 ${responsiveClasses && 'sm:order-none'}`}>
                     <UpvoteButton value={upvoteNumber} roadmap={roadmap} />
@@ -19,7 +19,7 @@ export default function CardFeedback({category, upvoteNumber, heading, body, com
                     <Button value={category} noHover={true} />
                 </section>
 
-                <div className={`flex items-center ml-4 order-3 ml-auto ${responsiveClasses && 'sm:order-none sm:ml-0 sm:ml-4'}`}>
+                <div className={`flex items-center order-3 ml-auto ${responsiveClasses && 'sm:order-none sm:ml-0'}`}>
                     <Image src={'/images/comment-icon.svg'} width={'20'} height={'20'} alt={'Comment icon'} />
                     <p className="ml-4 font-bold">{commentsNumber}</p>
                 </div>
