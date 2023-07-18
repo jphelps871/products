@@ -1,6 +1,6 @@
-export default function Card({children, tailwindStyles}) {
+export default function Card({children, tailwindStyles, onMouseEnterCard, onMouseLeaveCard}) {
     return (
-        <div className={`overflow-hidden p-4 sm:p-6 ${tailwindStyles}`}>
+        <div onMouseEnter={onMouseEnterCard} onMouseLeave={onMouseLeaveCard} className={`p-4 sm:p-6 ${tailwindStyles}`}>
             {children}
         </div>
     )

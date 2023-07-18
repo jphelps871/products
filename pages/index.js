@@ -153,8 +153,8 @@ export default function Home({ feedbackData }) {
                     className="mr-4 hidden sm:block"
                   />
                   <p className="mr-6 font-bold hidden sm:block">6 Suggestions</p>
-                  <div>
-                    <label className="mr-1 hidden sm:inline-block" htmlFor="cars">Sort by:</label>
+                  <div className="flex items-center">
+                    <label className="hidden sm:inline-block">Sort by:</label>
                     <DropDown />
                   </div>
 

@@ -1,7 +1,6 @@
 import { createPathsObject, getFeedbackById } from '../../lib/localData'
 import Head from 'next/head'
 import CommentForm from '@/components/CommentForm'
-import Link from 'next/link'
 import Card from '@/components/Card'
 import CardFeedback from '@/components/CardFeedback'
 import FeedBackButton from "@/components/FeedBackButton"
@@ -47,7 +46,7 @@ export default function CommentPage({feedback}) {
                         body={feedback.body} 
                         commentsNumber={feedback.numberOfComments} />
 
-                    <Card>
+                    <Card tailwindStyles={'bg-white rounded-lg'}>
                         <p className='font-bold text-dark-grey text-xl'>{numberOfComments} Comments</p>
 
                         {comments.map(comment => (
@@ -57,7 +56,7 @@ export default function CommentPage({feedback}) {
                 </div>
 
                 <div className='mt-10 mb-20'>
-                    <Card>
+                    <Card tailwindStyles={'bg-white rounded-lg'}>
                         <p className='font-bold text-dark-grey text-xl mb-8'>Add Comment</p>
                         <CommentForm />
                     </Card>
