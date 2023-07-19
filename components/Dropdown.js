@@ -16,7 +16,7 @@ export default function DropDown() {
 
             <div className={`${open ? 'absolute' : 'hidden'} left-3 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-xl focus:outline-none`} role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabIndex="-1">
                 <div role="none">
-                    <a href="#" className="text-gray-700 block px-4 py-3 text-md border-b hover:text-dark-purple flex items-center justify-between" role="menuitem" tabIndex="-1" id="menu-item-0">
+                    <a href="#" className="text-gray-700 px-4 py-3 text-md border-b hover:text-dark-purple flex items-center justify-between" role="menuitem" tabIndex="-1" id="menu-item-0">
                         Most Upvotes
                         <svg className="w-4 h-4" viewBox="0 0 13 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path className="text-dark-purple" d="M0.968262 4.85894L4.49995 8.39062L11.9999 0.890625" stroke="#AD1FEA" strokeWidth="2"/>
@@ -24,9 +24,7 @@ export default function DropDown() {
                     </a>
                     <a href="#" className="text-gray-700 block px-4 py-3 text-md border-b hover:text-dark-purple" role="menuitem" tabIndex="-1" id="menu-item-1">Least Upvotes</a>
                     <a href="#" className="text-gray-700 block px-4 py-3 text-md border-b hover:text-dark-purple" role="menuitem" tabIndex="-1" id="menu-item-2">Most Comments</a>
-                    <form method="POST" action="#" role="none">
-                        <button type="submit" className="text-gray-700 block w-full px-4 py-3 text-left text-md hover:text-dark-purple" role="menuitem" tabIndex="-1" id="menu-item-3">Least Comments</button>
-                    </form>
+                    <button type="submit" className="text-gray-700 block w-full px-4 py-3 text-left text-md hover:text-dark-purple" role="menuitem" tabIndex="-1" id="menu-item-3">Least Comments</button>
                 </div>
             </div>
         </div>

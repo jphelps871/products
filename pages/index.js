@@ -139,7 +139,7 @@ export default function Home({ feedbackData }) {
               
             </header>
 
-            {/* Background for mobiel */}
+            {/* Background for mobile */}
             <div onClick={() => setDisplayMenu(false)} className={`w-full h-full bg-gray-800 opacity-40 ${displayMenu ? 'absolute sm:hidden' : 'hidden'}`}></div>
 
             <div className="md:w-3/4">
@@ -159,7 +159,9 @@ export default function Home({ feedbackData }) {
                   </div>
 
                   <div className="ml-auto">
-                    <FeedBackButton bgColor={'dark-purple'}>+ Add Feedback</FeedBackButton>
+                    <Link href={`/add/feedback`}>
+                      <FeedBackButton bgColor={'dark-purple'}>+ Add Feedback</FeedBackButton>
+                    </Link>
                   </div>
                 </div>
               </Card>

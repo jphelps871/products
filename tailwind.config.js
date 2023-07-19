@@ -24,7 +24,7 @@ module.exports = {
         'orange': '#F49F85',
         'hover': '#CFD7FF',
         'hover-feedback': '#C75AF6',
-        'form-text': '#8C92B3'
+        'form-text': '#8C92B3',
       },
       gridTemplateColumns: {
         'feedback-card': '1fr 9fr 1fr',
