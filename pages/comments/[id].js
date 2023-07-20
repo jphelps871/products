@@ -35,7 +35,7 @@ export default function CommentPage({feedback}) {
                         <BackLink />
                     </div>
                     <div>
-                        <FeedBackButton bgColor={'dark-blue'}>Edit Feedback</FeedBackButton>
+                        <FeedBackButton bgColor={'bg-dark-blue'}>Edit Feedback</FeedBackButton>
                     </div>
                 </div>
                 <div className='flex flex-col gap-5 mt-5'>

@@ -1,35 +1,32 @@
 import FormContainer from "@/components/form/FormContainer";
 import FeedBackButton from "@/components/FeedBackButton";
-import DropDown from "@/components/Dropdown";
+import FormCharactersContainer from "@/components/form/FormCharactersContainer";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 
 export default function feedback() {
-    const [characters, setCharacters] = useState(60);
+    const [feedbackCharacters, setFeedbackCharacters] = useState(0);
+    const [detailCharacters, setDetailCharacters] = useState(0);
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const onSubmit = data => console.log(data);
-
-    function characterCount(e) {
-        const textArea = e.target
-        const charactersUsed = textArea.value.length
-        setCharacters(60 - charactersUsed)
-    }
+    // const onSubmit = data => console.log(data);
 
     return (
         <FormContainer heading={'Create New Feedback'} iconPath={'/images/plus-icon.svg'} IconAlt={'Plus icon'}>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
 
-                <div className="mb-4">
+                {/* Title */}
+                <div className="mb-5">
                     <label htmlFor="title" className="text-dark-grey font-bold">
                         Feedback Title
-                        <span className="text-dark-grey font-normal block">Add a short, descriptive headline</span>
+                        <span className="text-dark-grey font-normal block text-sm">Add a short, descriptive headline</span>
                     </label>
 
                     <input 
-                        onKeyUp={(e) => characterCount(e)} 
+                        onKeyUp={(e) => setFeedbackCharacters(e.target.value.length)} 
                         id="title" 
-                        type="text" 
+                        type="text"
+                        maxLength="60"
                         className={`bg-light-cream mt-3 p-3 w-full rounded-lg ${errors.title && 'border-2 border-red-500'}`} 
                         {...register("title", 
                             { 
@@ -41,24 +38,91 @@ export default function feedback() {
                             }
                         )} 
                     />
-                    <p className='text-form-text text-sm'>{characters} Characters left</p>
-                    {errors.title && <p className="text-red-500 mt-1" role="alert">
-                        {errors.title?.message}
+                    <FormCharactersContainer count={feedbackCharacters} limit={60}  />
+                    {errors.title && 
+                        <p className="text-red-500 mt-1" role="alert">
+                            {errors.title?.message}
                         </p>}
                 </div>
 
-                <div className="mb-4">
+                {/* Category */}
+                <div className="mb-5">
+                    <label htmlFor="category" className="text-dark-grey font-bold">
+                        Category
+                        <span className="text-dark-grey font-normal block text-sm">Choose a category for your feedback</span>
+                    </label>
+
+                    <select 
+                        className="mt-3 cursor-pointer rounded-lg p-4 text-md bg-light-cream w-full text-dark-grey" 
+                        name="category" 
+                        id="category"
+                        {...register("category", { required: true})} 
+                        >
+                        {["Feature", "UI", "UX", "Enhancements", "Bug"].map(type => (
+                            <option key={type} value={type}>{type}</option>
+                        ))}
+                    </select>
                 </div>
 
-                {/* Buttons */}
+                {/* Status */}
+                <div className="mb-5">
+                    <label htmlFor="status" className="text-dark-grey font-bold">
+                        Update Status
+                        <span className="text-dark-grey font-normal block text-sm">Choose feature state</span>
+                    </label>
+
+                    <select 
+                        className="mt-3 cursor-pointer rounded-lg p-4 text-md bg-light-cream w-full text-dark-grey" 
+                        name="status" 
+                        id="status"
+                        {...register("status", { required: true})} 
+                        >
+                        {["Planned", "In-Progress", "Live"].map(type => (
+                            <option key={type} value={type}>{type}</option>
+                        ))}
+                    </select>
+                </div>
+
+                {/* Details */}
+                <div className="mb-5">
+                    <label htmlFor="title" className="text-dark-grey font-bold">
+                        Feedback Detail
+                        <span className="text-dark-grey font-normal block text-sm">Include any specific comments on what should be improved, added, etc.</span>
+                    </label>
+
+                    <textarea 
+                        onKeyUp={(e) => setDetailCharacters(e.target.value.length)} 
+                        id="detail" 
+                        type="text"
+                        rows="4"
+                        maxLength="100"
+                        className={`bg-light-cream mt-3 p-3 w-full rounded-lg ${errors.detail && 'border-2 border-red-500'}`} 
+                        {...register("detail", 
+                            { 
+                                required: "Detail on feedback is required", 
+                                maxLength: {
+                                    value: 100, 
+                                    message: "Must be less than 100 characters"
+                                } 
+                            }
+                        )} 
+                    />
+                    <FormCharactersContainer count={detailCharacters} limit={100}  />
+                    {errors.detail && 
+                        <p className="text-red-500 mt-1" role="alert">
+                            {errors.detail?.message}
+                        </p>}
+                </div>
+
+                {/* Submit / Cancel */}
                 <div className="flex justify-end">
                     <div className="mr-2">
-                        <Link href="/">
-                            <FeedBackButton bgColor={'dark-grey'}>Cancel</FeedBackButton>
+                        <Link href={'/'}>
+                            <FeedBackButton bgColor={'bg-dark-grey'}>Cancel</FeedBackButton>
                         </Link>
                     </div>
                     <div>
-                        <FeedBackButton submit bgColor={'dark-purple'}>Add Feedback</FeedBackButton>
+                        <FeedBackButton submit bgColor={'bg-dark-purple'}>Add Feedback</FeedBackButton>
                     </div>
                 </div>
             </form>

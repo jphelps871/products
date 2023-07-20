@@ -5,10 +5,10 @@ import Image from "next/image";
 export default function FormContainer({children, iconPath, heading, IconAlt}) {
     return (
         <>
-            <div className="w-screen h-screen flex justify-center items-center">
-                <div className="sm:max-w-xl sm:w-3/4 w-4/4 -mt-40">
+            <div className="my-4">
+                <div className="max-w-xl sm:mx-auto mx-4">
                     <BackLink />
-                    <Card tailwindStyles={'bg-white rounded-lg mt-20 relative'}>
+                    <Card tailwindStyles={'bg-white rounded-lg mt-10 relative'}>
                         <Image 
                             width='56' 
                             height='56' 

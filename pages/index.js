@@ -24,7 +24,7 @@ export default function Home({ feedbackData }) {
       </Head>
 
         <main className="max-w-screen-xl w-full sm:w-11/12 mx-auto md:pt-6 sm:pt-6">
-          <div className="gap-6 md:flex sm:mx-3">
+          <div className="gap-6 md:flex">
 
             <header className="md:w-1/4 z-50">
               
@@ -150,17 +150,21 @@ export default function Home({ feedbackData }) {
                     width={24}
                     height={24}
                     alt="Bulb"  
-                    className="mr-4 hidden sm:block"
+                    className="mr-4 hidden lg:block"
                   />
                   <p className="mr-6 font-bold hidden sm:block">6 Suggestions</p>
                   <div className="flex items-center">
                     <label className="hidden sm:inline-block">Sort by:</label>
-                    <DropDown />
+                    <DropDown 
+                      items={["Most Upvotes", "Least Upvotes", "Most Comments", "Least Comments"]} 
+                      buttonStyles={"inline-flex w-full justify-center gap-x-1.5 rounded-lg px-3 py-2 text-md text-white font-semibold"}
+                      dropdownPositionStyles={"-left-14 z-10 mt-2"}
+                    />
                   </div>
 
                   <div className="ml-auto">
                     <Link href={`/add/feedback`}>
-                      <FeedBackButton bgColor={'dark-purple'}>+ Add Feedback</FeedBackButton>
+                      <FeedBackButton bgColor={'bg-dark-purple'}>+ Add Feedback</FeedBackButton>
                     </Link>
                   </div>
                 </div>
