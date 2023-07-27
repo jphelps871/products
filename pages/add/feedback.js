@@ -9,7 +9,7 @@ export default function feedback() {
     const [feedbackCharacters, setFeedbackCharacters] = useState(0);
     const [detailCharacters, setDetailCharacters] = useState(0);
     const { register, handleSubmit, formState: { errors } } = useForm();
-    // const onSubmit = data => console.log(data);
+    const onSubmit = data => console.log(data);
 
     return (
         <FormContainer heading={'Create New Feedback'} iconPath={'/images/plus-icon.svg'} IconAlt={'Plus icon'}>

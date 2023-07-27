@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Status {
+  PLANNED
+  IN_PROGRESS
+  LIVE
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String @unique @db.VarChar(255)
+
+  feedback Feedback[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  comment   String   @db.VarChar(255)
+
+  feedback   Feedback @relation(fields: [feedbackId], references: [id])
+  feedbackId Int
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  parentId      Int?      @unique
+  parent        Comment?  @relation("ChildComment", fields: [parentId], references: [id])
+  childComments Comment[] @relation("ChildComment")
+}
+
+model Feedback {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String   @db.VarChar(255)
+  detail    String   @db.VarChar(255)
+  status    Status   @default(PLANNED)
+
+  comments Comment[]
+
+  author   User @relation(fields: [authorId], references: [id])
+  authorId Int
+
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+}
+
+model User {
+  id       Int        @id @default(autoincrement())
+  email    String     @unique
+  username String     @unique
+  name     String
+  role     Role       @default(USER)
+  feedback Feedback[]
+  Comment  Comment[]
+}
