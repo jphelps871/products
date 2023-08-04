@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import FormContainer from "@/components/form/FormContainer";
 import FeedBackButton from "@/components/FeedBackButton";
 import FormCharactersContainer from "@/components/form/FormCharactersContainer";
@@ -5,7 +6,27 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 
+
+export async function getStaticPaths() {
+    return {
+      paths: [
+        { params: { type: 'create' } },
+        { params: { type: 'edit' } },
+      ],
+      fallback: false,
+    };
+}
+
+export async function getStaticProps() {
+    return {
+      props: {},
+    };
+}
+
 export default function feedback() {
+    const router = useRouter();
+    const { type } = router.query;
+
     const [feedbackCharacters, setFeedbackCharacters] = useState(0);
     const [detailCharacters, setDetailCharacters] = useState(0);
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -65,6 +86,7 @@ export default function feedback() {
                 </div>
 
                 {/* Status */}
+                {type === 'edit' && (
                 <div className="mb-5">
                     <label htmlFor="status" className="text-dark-grey font-bold">
                         Update Status
@@ -82,6 +104,7 @@ export default function feedback() {
                         ))}
                     </select>
                 </div>
+                )}
 
                 {/* Details */}
                 <div className="mb-5">
