@@ -3,6 +3,8 @@ import FormContainer from "@/components/form/FormContainer";
 import FeedBackButton from "@/components/FeedBackButton";
 import FormCharactersContainer from "@/components/form/FormCharactersContainer";
 import Link from "next/link";
+import prisma from '../api/prisma/prisma';
+import { useUser } from "@supabase/auth-helpers-react";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 
@@ -18,19 +20,44 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps() {
+    const categories = await prisma.category.findMany()
     return {
-      props: {},
+      props: {categories},
     };
 }
 
-export default function feedback() {
+async function send(data, userId) {
+    const feedback = data
+    feedback['userId'] = userId
+
+    try {
+        await fetch('/api/feedback', {
+            method: 'POST',
+            headers: {'Accept': 'application/json'},
+            body: JSON.stringify(feedback)
+        })
+    } catch (error) {
+        console.error(error)
+    }
+
+
+}
+
+export default function feedback({categories}) {
+    const user = useUser()
     const router = useRouter();
     const { type } = router.query;
 
     const [feedbackCharacters, setFeedbackCharacters] = useState(0);
     const [detailCharacters, setDetailCharacters] = useState(0);
-    const { register, handleSubmit, formState: { errors } } = useForm();
-    const onSubmit = data => console.log(data);
+    const [loading, setLoading] = useState(false)
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const onSubmit = data => {
+        setLoading(true)
+        send(data, user?.id || "");
+        setLoading(false)
+        reset()
+    }
 
     return (
         <FormContainer heading={'Create New Feedback'} iconPath={'/images/plus-icon.svg'} IconAlt={'Plus icon'}>
@@ -79,8 +106,8 @@ export default function feedback() {
                         id="category"
                         {...register("category", { required: true})} 
                         >
-                        {["Feature", "UI", "UX", "Enhancements", "Bug"].map(type => (
-                            <option key={type} value={type}>{type}</option>
+                        {categories.map(category => (
+                            <option key={category.id} value={category.id}>{category.name}</option>
                         ))}
                     </select>
                 </div>
@@ -145,7 +172,9 @@ export default function feedback() {
                         </Link>
                     </div>
                     <div>
-                        <FeedBackButton submit bgColor={'bg-dark-purple'}>Add Feedback</FeedBackButton>
+                        <FeedBackButton submit bgColor={'bg-dark-purple'}>
+                            {!loading ? 'Add Feedback' : 'Loading...'}
+                        </FeedBackButton>
                     </div>
                 </div>
             </form>

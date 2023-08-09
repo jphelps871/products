@@ -7,17 +7,48 @@ import FeedBackButton from "@/components/FeedBackButton"
 import CardFeedback from "@/components/CardFeedback"
 import Link from "next/link"
 import Login from "@/components/Login"
+import Categories from "@/components/Categories"
+import prisma from "./api/prisma/prisma"
 import { getLocalData } from '../lib/localData'
 import { useState } from "react"
 
 export async function getStaticProps() {
   const feedbackData = await getLocalData()
-  return {props: {feedbackData}}
+  const categories = await prisma.category.findMany()
+  const feedback = await prisma.feedback.findMany({
+    select: {
+      id: true,
+      upvotes: true,
+      title: true,
+      detail: true,
+      category: {
+        select: {
+          name: true,
+        },
+      },
+      comments: {
+        select: {
+          id: true,
+        },
+      },
+    },
+  })
+
+  return {props: {
+    feedback,
+    categories,
+  }}
 }
 
-export default function Home({ feedbackData }) {
-  const [displayMenu, setDisplayMenu] = useState(false)
+/*
 
+  DATA FOR FEEDBACK
+  category, upvoteNumber, heading, body, commentsNumber
+
+*/
+
+export default function Home({feedback, categories}) {
+  const [displayMenu, setDisplayMenu] = useState(false)
   return (
     <>
       <Head>
@@ -50,16 +81,7 @@ export default function Home({ feedbackData }) {
 
                 {/* Mobile */}
                 <div className={`w-4/5 h-full bg-light-cream p-4 absolute top-px80 right-0 z-50 ${displayMenu ? 'sm:hidden block' : 'hidden'}`}>
-                  <Card tailwindStyles={'sm:block bg-white rounded-lg'}>
-                    <div className="flex flex-wrap gap-3">
-                      <Button value={'All'} active={true}/>
-                      <Button value={'UI'} active={false}/>
-                      <Button value={'UX'} active={false}/>
-                      <Button value={'Enhancement'} active={false}/>
-                      <Button value={'Bug'} active={false}/>
-                      <Button value={'Features'} active={false}/>
-                    </div>
-                  </Card>
+                  <Categories categories={categories} />
 
                   <Card tailwindStyles={'sm:block mt-4 bg-white rounded-lg'}>
                     <div className="flex justify-between mb-2">
@@ -94,16 +116,7 @@ export default function Home({ feedbackData }) {
 
                 {/* Desktop */}
                 <div className={`col-span-2 grid-cols-2 md:grid-cols-1 sm:gap-3 hidden sm:grid`}>
-                  <Card tailwindStyles={'sm:block bg-white rounded-lg'}>
-                    <div className="flex flex-wrap gap-3">
-                      <Button value={'All'} active={true}/>
-                      <Button value={'UI'} active={false}/>
-                      <Button value={'UX'} active={false}/>
-                      <Button value={'Enhancement'} active={false}/>
-                      <Button value={'Bug'} active={false}/>
-                      <Button value={'Features'} active={false}/>
-                    </div>
-                  </Card>
+                  <Categories categories={categories}/>
 
                   <Card tailwindStyles={'sm:block bg-white rounded-lg'}>
                     <div className="flex justify-between mb-2">
@@ -176,9 +189,9 @@ export default function Home({ feedbackData }) {
               </Card>
 
               <div className="flex flex-col gap-4 mt-3 mx-2 sm:mx-0">
-                {feedbackData.map(data => (
+                {feedback.map(data => (
                   <Link key={data.id} href={`/comments/${data.id}`}>
-                    <CardFeedback category={data.category} upvoteNumber={data.numberOfUpvotes} heading={data.heading} body={data.body} commentsNumber={data.numberOfComments} />
+                    <CardFeedback category={data.category.name} upvoteNumber={data.upvotes} heading={data.title} body={data.detail} commentsNumber={data.comments.length} />
                   </Link>
                 ))}
               </div>

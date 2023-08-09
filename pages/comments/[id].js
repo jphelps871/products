@@ -1,5 +1,6 @@
-import { createPathsObject, getFeedbackById } from '../../lib/localData'
+// import { createPathsObject, getFeedbackById } from '../../lib/localData'
 import Head from 'next/head'
+import prisma from '../api/prisma/prisma'
 import CommentForm from '@/components/CommentForm'
 import Card from '@/components/Card'
 import CardFeedback from '@/components/CardFeedback'
@@ -8,21 +9,46 @@ import Comment from '@/components/Comment'
 import BackLink from '@/components/BackLink'
 
 export async function getStaticPaths() {
-    const pathObject = await createPathsObject()
+    const feedback = await prisma.feedback.findMany({
+        select: {
+            id: true
+        }
+    })
+    const paths = feedback.map((feedback) => ({
+        params: { id: feedback.id.toString() },
+    }))
+
     return {
-        paths: pathObject,
+        paths,
         fallback: false
     }
 }
 
 export async function getStaticProps({params}) {
-    const feedback = await getFeedbackById(params.id)
+    const feedback = await prisma.feedback.findUnique({
+        where: {
+            id: parseInt(params.id),
+        },
+        select: {
+            id: true,
+            upvotes: true,
+            title: true,
+            detail: true,
+            comments: true,
+            category: {
+                select: {
+                  name: true,
+                },
+            },
+        },
+    })
+
+    // const feedback = await getFeedbackById(params.id)
     return {props: { feedback }}
 }
 
 export default function CommentPage({feedback}) {
-    const comments = feedback.comments
-    const numberOfComments = comments.length
+    console.log(feedback)
 
     return (
         <>
@@ -40,16 +66,16 @@ export default function CommentPage({feedback}) {
                 </div>
                 <div className='flex flex-col gap-5 mt-5'>
                     <CardFeedback 
-                        category={feedback.category} 
-                        upvoteNumber={feedback.numberOfUpvotes} 
-                        heading={feedback.heading} 
-                        body={feedback.body} 
-                        commentsNumber={feedback.numberOfComments} />
+                        category={feedback.category.name} 
+                        upvoteNumber={feedback.upvotes} 
+                        heading={feedback.title} 
+                        body={feedback.detail} 
+                        commentsNumber={feedback.comments.length} />
 
                     <Card tailwindStyles={'bg-white rounded-lg'}>
-                        <p className='font-bold text-dark-grey text-xl'>{numberOfComments} Comments</p>
+                        <p className='font-bold text-dark-grey text-xl'>{feedback.comments.length} Comments</p>
 
-                        {comments.map(comment => (
+                        {feedback.comments.map(comment => (
                             <Comment key={comment.id} comment={comment} />
                         ))}
                     </Card>
