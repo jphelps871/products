@@ -1,51 +1,73 @@
 import { useState } from "react"
 import FeedBackButton from "./FeedBackButton"
+import FormCharactersContainer from "./form/FormCharactersContainer";
+import { useUser } from "@supabase/auth-helpers-react";
+import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
 
-export default function CommentForm() {
-    const [characters, setCharacters] = useState(250)
+function send(data) {
+    console.log(data)
+}
 
-    function characterCount(e) {
-        const textArea = e.target
-        const charactersUsed = textArea.value.length
-        setCharacters(250 - charactersUsed)
+export default function CommentForm({buttonText, commentId}) {
+    // const user = useUser()
+    const [feedbackCharacters, setFeedbackCharacters] = useState(0);
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const onSubmit = data => {
+        send(data);
+        reset()
     }
 
-    async function handleCommentSubmit(event) {
-        event.preventDefault();
-        const data = {
-            comment: event.target.comment.value
-        }
-        const JSONdata = JSON.stringify(data);
-        const endpoint = '/api/comment';
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSONdata,
-        }
-        const response = await fetch(endpoint, options);
-        const result = await response.json();
-        if (response.status == 200) {
-            event.target.childNodes[1].value = "";
-        } 
-    }
+    const router = useRouter()
+    // feedback ID
+    const {id} = router.query
 
     return (
-        <form onSubmit={handleCommentSubmit} method="post">
+        <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
             <label htmlFor="comment" className='hidden'>Comment</label>
             <textarea 
+                onKeyUp={(e) => setFeedbackCharacters(e.target.value.length)} 
                 placeholder="Type your comment here"
                 name="comment" 
                 id="comment" 
                 rows="4" 
                 maxLength="250"
-                onKeyUp={(e) => characterCount(e)}
-                className='bg-light-cream rounded-md w-full p-4 placeholder-form-text text-dark-grey' />
+                className={`bg-light-cream rounded-md w-full p-4 placeholder-form-text text-dark-grey ${errors.comment && 'border-2 border-red-500'}`}
+                {...register("comment", 
+                    { 
+                        required: "Comment is required", 
+                        maxLength: {
+                            value: 250, 
+                            message: "Must be less than 250 characters"
+                        } 
+                    }
+                )}
+            />
+            {errors.comment && 
+                <p className="text-red-500 mt-1" role="alert">
+                    {errors.comment?.message}
+                </p>
+            }
+
+            <input 
+                type="hidden" 
+                name="commentId" 
+                id="commentId" 
+                value={commentId} 
+                {...register("commentId")}
+                />
+
+            <input 
+                type="hidden" 
+                name="feedbackId" 
+                id="feedbackId" 
+                value={id} 
+                {...register("feedbackId")}
+                />
 
             <div className='flex justify-between mt-4 items-center'>
-                <p className='text-form-text text-sm'>{characters} Characters left</p>
-                <FeedBackButton bgColor={'dark-purple'}>Post Comment</FeedBackButton>
+                <FormCharactersContainer count={feedbackCharacters} limit={250}  />
+                <FeedBackButton submit bgColor={'bg-dark-purple'}>{buttonText}</FeedBackButton>
             </div>
         </form>
     )

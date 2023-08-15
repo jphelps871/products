@@ -5,7 +5,7 @@ import CommentForm from '@/components/CommentForm'
 import Card from '@/components/Card'
 import CardFeedback from '@/components/CardFeedback'
 import FeedBackButton from "@/components/FeedBackButton"
-import Comment from '@/components/Comment'
+import Comments from '@/components/Comments'
 import BackLink from '@/components/BackLink'
 
 export async function getStaticPaths() {
@@ -34,7 +34,34 @@ export async function getStaticProps({params}) {
             upvotes: true,
             title: true,
             detail: true,
-            comments: true,
+            // comments: {
+            //     select: {
+            //       id: true,
+            //       comment: true,
+            //       childComments: {
+            //         select: {
+            //             id: true,
+            //             comment: true,
+            //             user: {
+            //                 select: {
+            //                     id: true,
+            //                     username: true,
+            //                     name: true,
+            //                     avatar: true                
+            //                 }
+            //             }
+            //         }
+            //       },
+            //       user: {
+            //         select: {
+            //             id: true,
+            //             username: true,
+            //             name: true,
+            //             avatar: true
+            //         }
+            //       }
+            //     },
+            // },
             category: {
                 select: {
                   name: true,
@@ -43,13 +70,51 @@ export async function getStaticProps({params}) {
         },
     })
 
-    // const feedback = await getFeedbackById(params.id)
-    return {props: { feedback }}
+    const allComments = await prisma.comment.findMany({
+        where: {
+            feedbackId: parseInt(params.id),
+        },
+        select: {
+        id: true,
+        comment: true,
+        parentId: true,
+        user: {
+            select: {
+                id: true,
+                name: true,
+                username: true,
+                avatar: true
+            }
+        }
+        }
+    });
+
+    function buildCommentTree(comments) {
+        const commentMap = {};
+        const tree = [];
+    
+        comments.forEach(comment => {
+            comment.children = [];
+            commentMap[comment.id] = comment;
+            if (!comment.parentId) {
+                tree.push(comment);
+            } else {
+                const parentComment = commentMap[comment.parentId];
+                if (parentComment) {
+                    const parentUsername = parentComment.user.username;
+                    parentComment.children.push({ ...comment, parentUsername });
+                }
+            }
+        });
+    
+        return tree;
+    }
+
+    const comments = buildCommentTree(allComments);
+    return {props: { feedback, comments }}
 }
 
-export default function CommentPage({feedback}) {
-    console.log(feedback)
-
+export default function CommentPage({feedback, comments}) {
     return (
         <>
             <Head>
@@ -70,21 +135,19 @@ export default function CommentPage({feedback}) {
                         upvoteNumber={feedback.upvotes} 
                         heading={feedback.title} 
                         body={feedback.detail} 
-                        commentsNumber={feedback.comments.length} />
+                        commentsNumber={comments.length} />
 
                     <Card tailwindStyles={'bg-white rounded-lg'}>
-                        <p className='font-bold text-dark-grey text-xl'>{feedback.comments.length} Comments</p>
+                        <p className='font-bold text-dark-grey text-xl'>{comments.length} Comments</p>
 
-                        {feedback.comments.map(comment => (
-                            <Comment key={comment.id} comment={comment} />
-                        ))}
+                        <Comments comments={comments} />
                     </Card>
                 </div>
 
                 <div className='mt-10 mb-20'>
                     <Card tailwindStyles={'bg-white rounded-lg'}>
-                        <p className='font-bold text-dark-grey text-xl mb-8'>Add Comment</p>
-                        <CommentForm />
+                        <p className='font-bold text-dark-grey text-xl mb-8 '>Add Comment</p>
+                        <CommentForm buttonText={"Post Comment"} feedbackId={feedback.id} />
                     </Card>
                 </div>
             </div>

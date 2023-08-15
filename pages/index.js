@@ -40,13 +40,6 @@ export async function getStaticProps() {
   }}
 }
 
-/*
-
-  DATA FOR FEEDBACK
-  category, upvoteNumber, heading, body, commentsNumber
-
-*/
-
 export default function Home({feedback, categories}) {
   const [displayMenu, setDisplayMenu] = useState(false)
   return (
