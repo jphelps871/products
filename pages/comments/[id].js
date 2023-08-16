@@ -34,34 +34,6 @@ export async function getStaticProps({params}) {
             upvotes: true,
             title: true,
             detail: true,
-            // comments: {
-            //     select: {
-            //       id: true,
-            //       comment: true,
-            //       childComments: {
-            //         select: {
-            //             id: true,
-            //             comment: true,
-            //             user: {
-            //                 select: {
-            //                     id: true,
-            //                     username: true,
-            //                     name: true,
-            //                     avatar: true                
-            //                 }
-            //             }
-            //         }
-            //       },
-            //       user: {
-            //         select: {
-            //             id: true,
-            //             username: true,
-            //             name: true,
-            //             avatar: true
-            //         }
-            //       }
-            //     },
-            // },
             category: {
                 select: {
                   name: true,

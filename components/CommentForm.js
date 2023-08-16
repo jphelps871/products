@@ -5,21 +5,35 @@ import { useUser } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 
-function send(data) {
-    console.log(data)
+async function send(data, userId) {
+    if (!userId) return 
+
+    data["userId"] = userId
+
+    try {
+
+        await fetch('/api/comment', {
+            method: 'POST',
+            header: {'Accept': 'application/json'},
+            body: JSON.stringify(data)
+        })
+        
+    } catch (error) {
+        console.error(error)
+    }
 }
 
 export default function CommentForm({buttonText, commentId}) {
-    // const user = useUser()
+    const user = useUser()
     const [feedbackCharacters, setFeedbackCharacters] = useState(0);
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const onSubmit = data => {
-        send(data);
+        send(data, user?.id || "");
         reset()
     }
 
     const router = useRouter()
-    // feedback ID
+    // feedback ID - passed into hidden input fields
     const {id} = router.query
 
     return (
