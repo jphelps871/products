@@ -2,25 +2,22 @@ import { generateFromEmail } from "unique-username-generator";
 import prisma from "./prisma/prisma";
 
 export default async function handler(req, res) {
-    const body = req.body
-
+    const body = JSON.parse(req.body)
     const user = await prisma.user.findUnique({
         where: {
             id: body.id
         }
     })
-
     if (user) return res.status(200).json({data: "User exists"})
 
-
     // Make sure username is unique if not, create new usernames
-    let createUsername = generateFromEmail(body.email, 3)
+    let createdUsername = generateFromEmail(body.email, 3)
     let isUsernameUnique = false
 
     while (!isUsernameUnique) { 
         const usernameExists = await prisma.user.findUnique({
             where: {
-                username: createUsername
+                username: createdUsername
             }
         })
 
@@ -29,7 +26,7 @@ export default async function handler(req, res) {
             break
         }
 
-        createUsername = generateFromEmail(body.email, 3)
+        createdUsername = generateFromEmail(body.email, 3)
     }
 
     try {
@@ -37,9 +34,9 @@ export default async function handler(req, res) {
             data: {
                 id: body.id,
                 email: body.email,
-                name: body.name,
-                avatar: body.avatar,
-                username: body.username,
+                name: body.user_metadata.name,
+                avatar: body.user_metadata.avatar_url,
+                username: createdUsername,
             }
         })
     } catch (error) {

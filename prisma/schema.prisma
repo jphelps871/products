@@ -39,7 +39,7 @@ model Comment {
   userId String
   user   User   @relation(fields: [userId], references: [id])
 
-  parentId      Int?      @unique
+  parentId      Int?
   parent        Comment?  @relation("ChildComment", fields: [parentId], references: [id])
   childComments Comment[] @relation("ChildComment")
 }

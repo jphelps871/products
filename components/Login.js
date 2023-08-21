@@ -1,4 +1,5 @@
 import supabase from "@/utils/supabase";
+import { useEffect } from "react";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 
 export default function Login() {
@@ -11,10 +12,9 @@ export default function Login() {
           provider: "google",
           options: {
             queryParams: {
-              access_type: "offline",
-              prompt: "consent",
+              prompt: 'consent',
             },
-          }, 
+          },
         });
 
         if (error) {
@@ -25,6 +25,26 @@ export default function Login() {
         console.error("An error occurred:", error);
       }
     };
+
+    useEffect(() => {
+      const addUserWhenNotInDatabase = async (user) => {
+
+        try {
+
+          await fetch('api/user', {
+            method: 'POST',
+            headers: {'Accept': 'application/json'},
+            body: JSON.stringify(user)
+          })
+
+        } catch (error) {
+          console.error(error)
+        }
+
+      }
+
+      if (user) addUserWhenNotInDatabase(user)
+    }, [user])
 
     return (
       <>

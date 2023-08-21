@@ -21,32 +21,72 @@ function validateFeedback(comment, userId, feedbackId) {
 }
 
 export default async function handler(req, res) {
-    const body = JSON.parse(req.body)
-    const validationErrors = validateFeedback(body?.comment || "", body?.userId || "", body?.feedbackId || "")
 
-    if (JSON.stringify(validationErrors) !== '{}') {
-        res.status(400).json({data: validationErrors})
-    }
+    if (req.method === 'POST') {
+        const body = JSON.parse(req.body)
+        const validationErrors = validateFeedback(body?.comment || "", body?.userId || "", body?.feedbackId || "")
 
-    /*
-        comment   String   @db.VarChar(255)
-        feedbackId Int
-        userId String
-        parentId      Int?      @unique
-    */
-    const commentCreated = await prisma.comment.create({
-        data: {
-            comment: body.comment,
-            feedbackId: parseInt(body.feedbackId),
-            userId: body.userId,
-            parentId: body?.commentId ? parseInt(body.commentId) : null,
+        if (JSON.stringify(validationErrors) !== '{}') {
+            res.status(400).json({data: validationErrors})
         }
-    })
 
-    if (!commentCreated) {
-        res.status(400).json({data: commentCreated})
+        /*
+            comment   String   @db.VarChar(255)
+            feedbackId Int
+            userId String
+            parentId      Int?      @unique
+        */
+        const commentCreated = await prisma.comment.create({
+            data: {
+                comment: body.comment,
+                feedbackId: parseInt(body.feedbackId),
+                userId: body.userId,
+                parentId: body?.commentId ? parseInt(body.commentId) : null,
+            }
+        })
+
+        if (!commentCreated) {
+            res.status(400).json({data: commentCreated})
+        }
+
+        res.status(200).json({data: "Comment added"})
+    } else if (req.method === "GET") {
+
+        const { feedbackId } = req.query
+        const feedback = await prisma.feedback.findUnique({
+            where: {
+                id: parseInt(feedbackId),
+            },
+            select: {
+                id: true,
+                upvotes: true,
+                title: true,
+                detail: true,
+                category: {
+                    select: {
+                      name: true,
+                    },
+                },
+                comments: {
+                    select: {
+                        id: true,
+                        comment: true,
+                        parentId: true,
+                        user: {
+                            select: {
+                                id: true,
+                                name: true,
+                                username: true,
+                                avatar: true
+                            }
+                        }
+                    }
+                }
+            },
+        })
+    
+        const comments = feedback.comments;
+        res.status(200).json({ feedback, comments })
     }
-
-    res.status(200).json({data: "Comment added"})
 
 }
