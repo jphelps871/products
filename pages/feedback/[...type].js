@@ -3,28 +3,11 @@ import FormContainer from "@/components/form/FormContainer";
 import FeedBackButton from "@/components/FeedBackButton";
 import FormCharactersContainer from "@/components/form/FormCharactersContainer";
 import Link from "next/link";
-import prisma from '../api/prisma/prisma';
+import { getFeedback } from '@/services/feedback';
+import { getCategory } from '@/services/category';
 import { useUser } from "@supabase/auth-helpers-react";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
-
-
-export async function getStaticPaths() {
-    return {
-      paths: [
-        { params: { type: 'create' } },
-        { params: { type: 'edit' } },
-      ],
-      fallback: false,
-    };
-}
-
-export async function getStaticProps() {
-    const categories = await prisma.category.findMany()
-    return {
-      props: {categories},
-    };
-}
+import { useEffect, useState } from "react";
 
 async function send(data, userId) {
     const feedback = data
@@ -43,21 +26,42 @@ async function send(data, userId) {
 
 }
 
-export default function feedback({categories}) {
-    const user = useUser()
-    const router = useRouter();
-    const { type } = router.query;
-
+export default function feedback() {
     const [feedbackCharacters, setFeedbackCharacters] = useState(0);
     const [detailCharacters, setDetailCharacters] = useState(0);
-    const [loading, setLoading] = useState(false)
-    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const [categories, setCategories] = useState([])
+    const { setValue, register, handleSubmit, formState: { errors }, reset } = useForm();
+
+    const user = useUser()
+    const router = useRouter();
+    const [type, feedbackId] = router?.query?.type || []
+
+
     const onSubmit = data => {
-        setLoading(true)
-        send(data, user?.id || "");
-        setLoading(false)
+        console.log(data)
+        // send(data, user?.id || "");
         reset()
     }
+
+    useEffect(() => {
+        getCategory()
+            .then(response => setCategories(response.data))
+            .catch(error => console.error(error))
+    }, [])
+
+    useEffect(() => {
+        if (type === 'edit') {
+            getFeedback(feedbackId)
+                .then((data) => {
+                    const {feedback} = data
+                    console.log(feedback)
+                    setValue('title', feedback.title)
+                    setValue('category', feedback.category.id)
+                    setValue('detail', feedback.detail)
+                })
+                .catch((error) => console.error(error))
+        }
+    }, [feedbackId])
 
     return (
         <FormContainer heading={'Create New Feedback'} iconPath={'/images/plus-icon.svg'} IconAlt={'Plus icon'}>
@@ -102,7 +106,7 @@ export default function feedback({categories}) {
 
                     <select 
                         className="mt-3 cursor-pointer rounded-lg p-4 text-md bg-light-cream w-full text-dark-grey" 
-                        name="category" 
+                        name="category"
                         id="category"
                         {...register("category", { required: true})} 
                         >
@@ -173,7 +177,7 @@ export default function feedback({categories}) {
                     </div>
                     <div>
                         <FeedBackButton submit bgColor={'bg-dark-purple'}>
-                            {!loading ? 'Add Feedback' : 'Loading...'}
+                            {type === 'create' ? 'Add Feedback' : 'Edit Feedback'}
                         </FeedBackButton>
                     </div>
                 </div>

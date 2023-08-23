@@ -8,6 +8,7 @@ import FeedBackButton from "@/components/FeedBackButton"
 import Comments from '@/components/Comments'
 import BackLink from '@/components/BackLink'
 import supabase from '@/utils/supabase'
+import Link from 'next/link'
 import { getComments } from '@/services/getComments'
 import { useEffect, useState } from 'react'
 
@@ -49,21 +50,6 @@ export async function getServerSideProps(context) {
                   name: true,
                 },
             },
-            // comments: {
-            //     select: {
-            //         id: true,
-            //         comment: true,
-            //         parentId: true,
-            //         user: {
-            //             select: {
-            //                 id: true,
-            //                 name: true,
-            //                 username: true,
-            //                 avatar: true
-            //             }
-            //         }
-            //     }
-            // }
         },
     })
 
@@ -113,7 +99,9 @@ export default function CommentPage({feedback}) {
                         <BackLink />
                     </div>
                     <div>
-                        <FeedBackButton bgColor={'bg-dark-blue'}>Edit Feedback</FeedBackButton>
+                        <Link href={`/feedback/edit/${feedback.id}`}>
+                            <FeedBackButton bgColor={'bg-dark-blue'}>Edit Feedback</FeedBackButton>
+                        </Link>
                     </div>
                 </div>
 

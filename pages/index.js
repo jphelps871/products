@@ -9,11 +9,9 @@ import Link from "next/link"
 import Login from "@/components/Login"
 import Categories from "@/components/Categories"
 import prisma from "./api/prisma/prisma"
-import { getLocalData } from '../lib/localData'
 import { useState } from "react"
 
 export async function getStaticProps() {
-  const feedbackData = await getLocalData()
   const categories = await prisma.category.findMany()
   const feedback = await prisma.feedback.findMany({
     select: {

@@ -33,14 +33,14 @@ model Comment {
   createdAt DateTime @default(now())
   comment   String   @db.VarChar(255)
 
-  feedback   Feedback @relation(fields: [feedbackId], references: [id])
+  feedback   Feedback @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
   feedbackId Int
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   parentId      Int?
-  parent        Comment?  @relation("ChildComment", fields: [parentId], references: [id])
+  parent        Comment?  @relation("ChildComment", fields: [parentId], references: [id], onDelete: Cascade)
   childComments Comment[] @relation("ChildComment")
 }
 
@@ -55,7 +55,7 @@ model Feedback {
 
   comments Comment[]
 
-  author   User   @relation(fields: [authorId], references: [id])
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
 
   category   Category @relation(fields: [categoryId], references: [id])

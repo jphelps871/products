@@ -21,33 +21,61 @@ function validateFeedback(title, detail, category) {
 }
 
 export default async function handler(req, res) {
-    const body = JSON.parse(req.body)
-    const validationErrors = validateFeedback(body?.title || "", body?.detail || "", body?.category || "")
+    if (req.method === 'POST') {
+        const body = JSON.parse(req.body)
+        const validationErrors = validateFeedback(body?.title || "", body?.detail || "", body?.category || "")
 
-    if (JSON.stringify(validationErrors) !== '{}') {
-        res.status(400).json({data: validationErrors})
-    }
-
-    const userId = body.userId ? body.userId : "12183309418-23491234"
-
-    /*
-        title     String   @db.VarChar(255)
-        detail    String   @db.VarChar(255)
-        authorId String
-        categoryId Int
-    */
-    const feedbackCreated = await prisma.feedback.create({
-        data: {
-            title: body.title,
-            detail: body.detail,
-            categoryId: parseInt(body.category),
-            authorId: userId
+        if (JSON.stringify(validationErrors) !== '{}') {
+            res.status(400).json({data: validationErrors})
         }
-    })
 
-    if (!feedbackCreated) {
-        res.status(400).json({data: feedbackCreated})
+        const userId = body.userId ? body.userId : "12183309418-23491234"
+
+        /*
+            title     String   @db.VarChar(255)
+            detail    String   @db.VarChar(255)
+            authorId String
+            categoryId Int
+        */
+        const feedbackCreated = await prisma.feedback.create({
+            data: {
+                title: body.title,
+                detail: body.detail,
+                categoryId: parseInt(body.category),
+                authorId: userId
+            }
+        })
+
+        if (!feedbackCreated) {
+            res.status(400).json({data: feedbackCreated})
+        }
+
+        res.status(200).json({data: "Feedback added"})
+    } else if (req.method === "GET") {
+        const { feedbackId } = req.query
+
+        const feedback = await prisma.feedback.findUnique({
+            where: {
+                id: parseInt(feedbackId)
+            },
+            select: {
+                title: true,
+                detail: true,
+                authorId: true,
+                category: {
+                    select: {
+                        id: true,
+                        name: true,
+                    }
+                }
+            }
+        })
+
+        if (!feedback) {
+            res.status(400).json({data: feedback})
+        } else {
+            res.status(200).json({ feedback })
+        }
     }
-
-    res.status(200).json({data: "Feedback added"})
+    
 }
