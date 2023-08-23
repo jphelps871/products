@@ -49,30 +49,40 @@ export async function getServerSideProps(context) {
                   name: true,
                 },
             },
-            comments: {
-                select: {
-                    id: true,
-                    comment: true,
-                    parentId: true,
-                    user: {
-                        select: {
-                            id: true,
-                            name: true,
-                            username: true,
-                            avatar: true
-                        }
-                    }
-                }
-            }
+            // comments: {
+            //     select: {
+            //         id: true,
+            //         comment: true,
+            //         parentId: true,
+            //         user: {
+            //             select: {
+            //                 id: true,
+            //                 name: true,
+            //                 username: true,
+            //                 avatar: true
+            //             }
+            //         }
+            //     }
+            // }
         },
     })
 
-    const comments = feedback.comments;
-    return {props: { feedback, comments }}
+    return {props: { feedback }}
 }
 
-export default function CommentPage({feedback, comments}) {
-    const [allComments, setComments] = useState(() => buildCommentTree(comments))
+export default function CommentPage({feedback}) {
+    const [allComments, setComments] = useState()
+    const [commentsLength, setCommentsLength] = useState(0)
+    const [isLoading, setLoading] = useState(true)
+
+    useEffect(() => {
+        getComments(feedback.id).then(data => {
+            const comments = buildCommentTree(data.comments)
+            setCommentsLength(data.comments.length)
+            setComments(comments)
+            setLoading(false)
+        })
+    }, [])
 
     const channel = supabase
         .channel('schema-db-changes')
@@ -85,8 +95,8 @@ export default function CommentPage({feedback, comments}) {
             },
             () => {
                 getComments(feedback.id).then(data => {
-                    const testing = buildCommentTree(data.comments)
-                    setComments(testing)
+                    const comments = buildCommentTree(data.comments)
+                    setComments(comments)
                  })
             }
         )
@@ -113,13 +123,17 @@ export default function CommentPage({feedback, comments}) {
                         upvoteNumber={feedback.upvotes} 
                         heading={feedback.title} 
                         body={feedback.detail} 
-                        commentsNumber={allComments.length} />
+                        commentsNumber={commentsLength} />
 
-                    <Card tailwindStyles={'bg-white rounded-lg'}>
-                        <p className='font-bold text-dark-grey text-xl'>{allComments.length} Comments</p>
+                    {isLoading ? (
+                        <h1>Loading...</h1>
+                    ) : (
+                        <Card tailwindStyles={'bg-white rounded-lg'}>
+                            <p className='font-bold text-dark-grey text-xl'>{commentsLength} Comments</p>
 
-                        <Comments comments={allComments} />
-                    </Card>
+                            <Comments comments={allComments} />
+                        </Card>
+                    )}
                 </div>
 
                 <div className='mt-10 mb-20'>
