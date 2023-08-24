@@ -24,6 +24,7 @@ module.exports = {
         'orange': '#F49F85',
         'hover': '#CFD7FF',
         'hover-feedback': '#C75AF6',
+        'danger-red': '#D73737',
         'form-text': '#8C92B3',
       },
       gridTemplateColumns: {

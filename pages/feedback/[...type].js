@@ -3,28 +3,11 @@ import FormContainer from "@/components/form/FormContainer";
 import FeedBackButton from "@/components/FeedBackButton";
 import FormCharactersContainer from "@/components/form/FormCharactersContainer";
 import Link from "next/link";
-import { getFeedback } from '@/services/feedback';
+import { getFeedback, feedback as sendFeedback } from '@/services/feedback';
 import { getCategory } from '@/services/category';
 import { useUser } from "@supabase/auth-helpers-react";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-
-async function send(data, userId) {
-    const feedback = data
-    feedback['userId'] = userId
-
-    try {
-        await fetch('/api/feedback', {
-            method: 'POST',
-            headers: {'Accept': 'application/json'},
-            body: JSON.stringify(feedback)
-        })
-    } catch (error) {
-        console.error(error)
-    }
-
-
-}
 
 export default function feedback() {
     const [feedbackCharacters, setFeedbackCharacters] = useState(0);
@@ -34,14 +17,7 @@ export default function feedback() {
 
     const user = useUser()
     const router = useRouter();
-    const [type, feedbackId] = router?.query?.type || []
-
-
-    const onSubmit = data => {
-        console.log(data)
-        // send(data, user?.id || "");
-        reset()
-    }
+    const [type, feedbackId] = router?.query?.type || ["", ""]
 
     useEffect(() => {
         getCategory()
@@ -54,18 +30,33 @@ export default function feedback() {
             getFeedback(feedbackId)
                 .then((data) => {
                     const {feedback} = data
-                    console.log(feedback)
+
                     setValue('title', feedback.title)
                     setValue('category', feedback.category.id)
                     setValue('detail', feedback.detail)
+
+                    setFeedbackCharacters(feedback.title.length)
+                    setDetailCharacters( feedback.detail.length)
                 })
                 .catch((error) => console.error(error))
         }
     }, [feedbackId])
 
+    function handleClickSubmit(event) {
+        event.preventDefault()
+        const method = event.target.name
+
+        handleSubmit(data => {
+            sendFeedback(method, data, feedbackId)
+                .then(response => console.log(response))
+                .catch(error => console.error(error))
+        })()
+
+    }
+
     return (
-        <FormContainer heading={'Create New Feedback'} iconPath={'/images/plus-icon.svg'} IconAlt={'Plus icon'}>
-            <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+        <FormContainer heading={`${type === 'create' ? 'Create New Feedback' : 'Edit Feedback'}`} iconPath={'/images/plus-icon.svg'} IconAlt={'Plus icon'}>
+            <form autoComplete="off">
 
                 {/* Title */}
                 <div className="mb-5">
@@ -170,13 +161,21 @@ export default function feedback() {
 
                 {/* Submit / Cancel */}
                 <div className="flex justify-end">
+                    {type === 'edit' && (
+                        <div className='mr-auto'>
+                            <FeedBackButton submit handleClick={(e) => handleClickSubmit(e)} name={'delete'} bgColor={'bg-danger-red'}>
+                                Delete
+                            </FeedBackButton>
+                        </div>
+                    )}
+
                     <div className="mr-2">
                         <Link href={'/'}>
                             <FeedBackButton bgColor={'bg-dark-grey'}>Cancel</FeedBackButton>
                         </Link>
                     </div>
                     <div>
-                        <FeedBackButton submit bgColor={'bg-dark-purple'}>
+                        <FeedBackButton submit handleClick={(e) => handleClickSubmit(e)} name={type === 'create' ? 'post' : 'update'} bgColor={'bg-dark-purple'}>
                             {type === 'create' ? 'Add Feedback' : 'Edit Feedback'}
                         </FeedBackButton>
                     </div>

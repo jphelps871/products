@@ -1,6 +1,6 @@
-export default function FeedBackButton({bgColor, children, submit}) {
+export default function FeedBackButton({bgColor, children, handleClick, name, submit}) {
     return (
-        <button type={submit ? 'submit' : 'button'} className={`${bgColor} sm:px-5 px-4 py-3 hover:opacity-80 text-white rounded-lg font-bold text-sm sm:text-md`}>
+        <button onClick={handleClick} type={submit ? 'button' : 'submit'} name={name} className={`${bgColor} sm:px-5 px-4 py-3 hover:opacity-80 text-white rounded-lg font-bold text-sm sm:text-md`}>
             {children}
         </button>
     )
