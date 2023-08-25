@@ -21,14 +21,12 @@ function validateFeedback(title, detail, category) {
 }
 
 export default async function handler(req, res) {    
-    console.log(req.body)
-
     if (req.method === 'POST') {
         const body = JSON.parse(req.body)
         const validationErrors = validateFeedback(body?.title || "", body?.detail || "", body?.category || "")
 
         if (JSON.stringify(validationErrors) !== '{}') {
-            res.status(400).json({data: validationErrors})
+            res.status(400).json({validationErrors})
         }
 
         /**
@@ -38,20 +36,20 @@ export default async function handler(req, res) {
         const userId = body.userId ? body.userId : "12183309418-23491234"
 
         try {
-
             await prisma.feedback.create({
                 data: {
                     title: body.title,
                     detail: body.detail,
                     categoryId: parseInt(body.category),
+                    statusId: 1,
                     authorId: userId
                 }
             })
 
-            res.status(400).json({data: "Feedback added"})
+            res.status(200).json({ message: "Feedback added" })
         } catch (error) {
 
-            res.status(400).json({data: error})
+            res.status(400).json({ error })
         }
 
     } else if (req.method === "GET") {
@@ -71,14 +69,20 @@ export default async function handler(req, res) {
                             id: true,
                             name: true,
                         }
+                    },
+                    status: {
+                        select: {
+                            id: true,
+                            name: true
+                        }
                     }
                 }
             })
 
-            res.status(200).json({ data: feedback })
+            res.status(200).json({ feedback })
         } catch (error) {
 
-            res.status(400).json({ data: error })
+            res.status(400).json({ error })
         }
 
     } else if (req.method === 'DELETE') {
@@ -92,10 +96,37 @@ export default async function handler(req, res) {
             })
         } catch (error) {
 
-            res.status(400).json({ data: error })
+            res.status(400).json({ error })
         }
         
-        res.status(200).json({ data: "Feedback deleted" })
+        res.status(200).json({ message: "Feedback deleted" })
+
+    } else if (req.method === 'PUT') {
+        const body = JSON.parse(req.body)
+        const validationErrors = validateFeedback(body?.title || "", body?.detail || "", body?.category || "")
+
+        if (JSON.stringify(validationErrors) !== '{}') {
+            res.status(400).json({validationErrors})
+        }
+
+        try {
+            await prisma.feedback.update({
+                where: {
+                    id: body.feedbackId
+                },
+                data: {
+                    title: body.title,
+                    detail: body.detail,
+                    categoryId: parseInt(body.category),
+                    statusId: parseInt(body.status)
+                }
+            })
+
+            res.status(200).json({ message: "Feedback updated" })
+        } catch (error) {
+
+            res.status(400).json({ error })
+        }
     }
 
 }

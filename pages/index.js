@@ -24,6 +24,11 @@ export async function getStaticProps() {
           name: true,
         },
       },
+      status: {
+        select: {
+          name: true
+        }
+      },
       comments: {
         select: {
           id: true,

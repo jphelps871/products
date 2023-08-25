@@ -8,6 +8,7 @@ import { getCategory } from '@/services/category';
 import { useUser } from "@supabase/auth-helpers-react";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
+import { redirect } from 'next/navigation'
 
 export default function feedback() {
     const [feedbackCharacters, setFeedbackCharacters] = useState(0);
@@ -19,13 +20,12 @@ export default function feedback() {
     const router = useRouter();
     const [type, feedbackId] = router?.query?.type || ["", ""]
 
+
     useEffect(() => {
         getCategory()
             .then(response => setCategories(response.data))
             .catch(error => console.error(error))
-    }, [])
-
-    useEffect(() => {
+        
         if (type === 'edit') {
             getFeedback(feedbackId)
                 .then((data) => {
@@ -33,12 +33,16 @@ export default function feedback() {
 
                     setValue('title', feedback.title)
                     setValue('category', feedback.category.id)
+                    setValue('status', feedback.status.id)
                     setValue('detail', feedback.detail)
 
                     setFeedbackCharacters(feedback.title.length)
-                    setDetailCharacters( feedback.detail.length)
+                    setDetailCharacters(feedback.detail.length)
                 })
                 .catch((error) => console.error(error))
+        } else {
+            setValue('category', '1')
+            setValue('status', '1')
         }
     }, [feedbackId])
 
@@ -50,8 +54,11 @@ export default function feedback() {
             sendFeedback(method, data, feedbackId)
                 .then(response => console.log(response))
                 .catch(error => console.error(error))
+                .finally(() => {
+                    if (method === 'post') reset()
+                    if (method === 'delete') router.push("/")
+                })
         })()
-
     }
 
     return (
@@ -121,9 +128,9 @@ export default function feedback() {
                         id="status"
                         {...register("status", { required: true})} 
                         >
-                        {["Planned", "In-Progress", "Live"].map(type => (
-                            <option key={type} value={type}>{type}</option>
-                        ))}
+                            <option value="1">Planned</option>
+                            <option value="2">In-Progress</option>
+                            <option value="3">Live</option>
                     </select>
                 </div>
                 )}
@@ -159,7 +166,7 @@ export default function feedback() {
                         </p>}
                 </div>
 
-                {/* Submit / Cancel */}
+                {/* Submit / Edit / Cancel */}
                 <div className="flex justify-end">
                     {type === 'edit' && (
                         <div className='mr-auto'>
