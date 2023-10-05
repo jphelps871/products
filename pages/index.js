@@ -25,7 +25,7 @@ export async function getStaticProps() {
 export default function Home({ feedback, categories }) {
   const [displayMenu, setDisplayMenu] = useState(false);
   const [feedbackData, setFeedbackData] = useState(feedback);
-
+  
   // Call API to get feedback filtered by category
   async function handleClick(e) {
     const name = e.target.innerText
@@ -35,6 +35,30 @@ export default function Home({ feedback, categories }) {
     });
     const feedbackByCategory = await response.json();
     setFeedbackData(feedbackByCategory.feedback)
+  }
+  
+  function sortBy(e) {
+    // Find current sort by, if it is already matching do nothing
+    const name = e.target.value
+
+    const sortedFeedbackData = [...feedbackData].sort((current, next) => {
+      const currentUpvotes = current.upvotes
+      const nextUpvotes = next.upvotes
+      const currentComments = current.comments.length
+      const nextComments = next.comments.length
+
+      if (name.toUpperCase() === "MOST UPVOTES") {
+        return nextUpvotes - currentUpvotes
+      } else if (name.toUpperCase() === "LEAST UPVOTES") {
+        return currentUpvotes - nextUpvotes
+      } else if (name.toUpperCase() === "MOST COMMENTS") {
+        return nextComments - currentComments
+      } else {
+        return currentComments - nextComments
+      }
+    })
+    setFeedbackData(sortedFeedbackData)
+
   }
 
   return (
@@ -63,7 +87,7 @@ export default function Home({ feedback, categories }) {
 
               {/* Mobile */}
               <div className={`w-4/5 h-full bg-light-cream p-4 absolute top-px80 right-0 z-50 ${displayMenu ? "sm:hidden block" : "hidden"}`}>
-                <Categories handleClick={handleClick} categories={categories} />
+                <Categories onClick={handleClick} categories={categories} />
 
                 <Card tailwindStyles={"sm:block mt-4 bg-white rounded-lg"}>
                   <div className="flex justify-between mb-2">
@@ -150,17 +174,12 @@ export default function Home({ feedback, categories }) {
                 <Image src="images/bulb.svg" width={24} height={24} alt="Bulb" className="mr-4 hidden lg:block" />
                 <p className="mr-6 font-bold hidden sm:block">6 Suggestions</p>
                 <div className="flex items-center">
-                  <label className="hidden sm:inline-block">Sort by:</label>
-                  {/* <DropDown 
-                      items={["Most Upvotes", "Least Upvotes", "Most Comments", "Least Comments"]} 
-                      buttonStyles={"inline-flex w-full justify-center gap-x-1.5 rounded-lg px-3 py-2 text-md text-white font-semibold"}
-                      dropdownPositionStyles={"-left-14 z-10 mt-2"}
-                    /> */}
-                  <select name="" id="" className="inline-flex w-full justify-center gap-x-1.5 rounded-lg px-3 py-2 text-md text-white font-semibold bg-transparent">
-                    <option value="">Most Upvotes</option>
-                    <option value="">Least Upvotes</option>
-                    <option value="">Most Comments</option>
-                    <option value="">Least Comments</option>
+                  <label id="sortBy" className="hidden sm:inline-block">Sort by:</label>
+                  <select onMouseUp={(e) => sortBy(e)} name="sortBy" className="inline-flex w-full justify-center gap-x-1.5 rounded-lg px-3 py-2 text-md text-white font-semibold bg-transparent">
+                    <option value="Most Upvotes">Most Upvotes</option>
+                    <option value="Least Upvotes">Least Upvotes</option>
+                    <option value="Most Comments">Most Comments</option>
+                    <option value="Least Comments">Least Comments</option>
                   </select>
                 </div>
 
