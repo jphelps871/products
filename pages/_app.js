@@ -1,4 +1,6 @@
 import '/styles/globals.css'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs'
 import { SessionContextProvider } from '@supabase/auth-helpers-react'
@@ -13,6 +15,7 @@ export default function App({ Component, pageProps }) {
       supabaseClient={supabaseClient}
       initialSession={pageProps.initialSession}
     >
+      <ToastContainer />
       <Component {...pageProps} />
     </SessionContextProvider>
   )

@@ -53,40 +53,37 @@ export default async function handler(req, res) {
     } else if (req.method === "GET") {
 
         const { feedbackId } = req.query
-        const feedback = await prisma.feedback.findUnique({
-            where: {
-                id: parseInt(feedbackId),
-            },
-            select: {
-                id: true,
-                upvotes: true,
-                title: true,
-                detail: true,
-                category: {
-                    select: {
-                      name: true,
-                    },
+
+        try {
+            const feedback = await prisma.feedback.findUnique({
+                where: {
+                    id: parseInt(feedbackId),
                 },
-                comments: {
-                    select: {
-                        id: true,
-                        comment: true,
-                        parentId: true,
-                        user: {
-                            select: {
-                                id: true,
-                                name: true,
-                                username: true,
-                                avatar: true
+                select: {
+                    comments: {
+                        select: {
+                            id: true,
+                            comment: true,
+                            parentId: true,
+                            user: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    username: true,
+                                    avatar: true
+                                }
                             }
                         }
                     }
-                }
-            },
-        })
-    
-        const comments = feedback.comments;
-        res.status(200).json({ feedback, comments })
+                },
+            })
+        
+            const comments = feedback.comments;
+            res.status(200).json({ comments })
+
+        } catch (error) {
+            res.status(400).json({error})
+        }
     }
 
 }

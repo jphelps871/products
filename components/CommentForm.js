@@ -1,9 +1,11 @@
 import { useState } from "react"
-import FeedBackButton from "./FeedBackButton"
-import FormCharactersContainer from "./form/FormCharactersContainer";
+import { toast } from 'react-toastify';
 import { useUser } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
+
+import FeedBackButton from "./FeedBackButton"
+import FormCharactersContainer from "./form/FormCharactersContainer";
 
 async function send(data, userId) {
     if (!userId) return 
@@ -27,9 +29,16 @@ export default function CommentForm({buttonText, commentId}) {
     const user = useUser()
     const [feedbackCharacters, setFeedbackCharacters] = useState(0);
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
-    const onSubmit = data => {
-        send(data, user?.id || "");
-        reset()
+
+    function handleClickSubmit(event) {
+        handleSubmit(data => {
+            if (!user) {
+                toast.error('You must be logged in to comment')
+            } else {
+                send(data, user?.id || "");
+                reset()
+            }
+        })()
     }
 
     const router = useRouter()
@@ -37,7 +46,7 @@ export default function CommentForm({buttonText, commentId}) {
     const {id} = router.query
 
     return (
-        <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+        <form autoComplete="off">
             <label htmlFor="comment" className='hidden'>Comment</label>
             <textarea 
                 onKeyUp={(e) => setFeedbackCharacters(e.target.value.length)} 
@@ -81,7 +90,7 @@ export default function CommentForm({buttonText, commentId}) {
 
             <div className='flex justify-between mt-4 items-center'>
                 <FormCharactersContainer count={feedbackCharacters} limit={250}  />
-                <FeedBackButton submit bgColor={'bg-dark-purple'}>{buttonText}</FeedBackButton>
+                <FeedBackButton submit handleClick={(e) => handleClickSubmit(e)} name={'post'} bgColor={'bg-dark-purple'}>{buttonText}</FeedBackButton>
             </div>
         </form>
     )
