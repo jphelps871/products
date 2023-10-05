@@ -6,14 +6,12 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import { getFeedback, feedback as sendFeedback } from "@/services/feedback";
 import { getCategory } from "@/services/category";
-import { useUser } from "@supabase/auth-helpers-react";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 
 export default function feedback() {
   const [feedbackCharacters, setFeedbackCharacters] = useState(0);
   const [detailCharacters, setDetailCharacters] = useState(0);
-  // const [feedbackData, setFeedbackData] = useState({});
   const [categories, setCategories] = useState([]);
 
   const router = useRouter();
@@ -29,7 +27,10 @@ export default function feedback() {
     if (type === "edit") {
       getFeedback(feedbackId)
         .then((data) => {
-          reset(data.feedback)
+          const feedbackForForm = data.feedback
+          feedbackForForm.category = feedbackForForm.category.id
+          feedbackForForm.status = feedbackForForm.status.id
+          reset(feedbackForForm)
         })
         .catch((error) => console.error(error));
     }
