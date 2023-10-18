@@ -13,11 +13,17 @@ export default function feedback() {
   const [feedbackCharacters, setFeedbackCharacters] = useState(0);
   const [detailCharacters, setDetailCharacters] = useState(0);
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const router = useRouter();
   const [type, feedbackId] = router?.query?.type || ["", ""];
 
-  const { register, handleSubmit, formState: { errors }, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
 
   useEffect(() => {
     getCategory()
@@ -27,12 +33,22 @@ export default function feedback() {
     if (type === "edit") {
       getFeedback(feedbackId)
         .then((data) => {
-          const feedbackForForm = data.feedback
-          feedbackForForm.category = feedbackForForm.category.id
-          feedbackForForm.status = feedbackForForm.status.id
-          reset(feedbackForForm)
+          setLoading(true);
+
+          const feedbackForForm = data.feedback;
+          feedbackForForm.category = feedbackForForm.category.id;
+          feedbackForForm.status = feedbackForForm.status.id;
+          reset(feedbackForForm);
+
+          console.log(feedbackForForm);
+
+          // Set characters length for text fields
+          setDetailCharacters(feedbackForForm.detail.length);
+          setFeedbackCharacters(feedbackForForm.title.length);
         })
-        .catch((error) => console.error(error));
+        
+        .catch((error) => console.error(error))
+        .finally(() => setLoading(false));
     }
   }, [feedbackId]);
 
@@ -45,10 +61,17 @@ export default function feedback() {
         .then((response) => toast.success(response.message))
         .catch((error) => console.error(error))
         .finally(() => {
-          if (method === "post") reset();
-          if (method === "delete") router.push("/");
+          router.push("/");
         });
     })();
+  }
+
+  if (loading) { 
+    return (
+      <div>
+        <h1>Loading</h1>
+      </div>
+    )
   }
 
   return (

@@ -12,7 +12,12 @@ import { useState } from "react";
 
 export async function getStaticProps() {
   const categories = await prisma.category.findMany();
-  const feedback = await prisma.feedback.findMany({select: allFeedback});
+  const feedback = await prisma.feedback.findMany({
+    select: allFeedback,
+    orderBy: {
+      upvotes: "desc",
+    },
+  });
 
   return {
     props: {
@@ -25,40 +30,39 @@ export async function getStaticProps() {
 export default function Home({ feedback, categories }) {
   const [displayMenu, setDisplayMenu] = useState(false);
   const [feedbackData, setFeedbackData] = useState(feedback);
-  
+
   // Call API to get feedback filtered by category
   async function handleClick(e) {
-    const name = e.target.innerText
+    const name = e.target.innerText;
     const response = await fetch(`api/feedback?category=${name}`, {
       method: "GET",
       header: { Accept: "application/json" },
     });
     const feedbackByCategory = await response.json();
-    setFeedbackData(feedbackByCategory.feedback)
+    setFeedbackData(feedbackByCategory.feedback);
   }
-  
+
   function sortBy(e) {
     // Find current sort by, if it is already matching do nothing
-    const name = e.target.value
+    const name = e.target.value;
 
     const sortedFeedbackData = [...feedbackData].sort((current, next) => {
-      const currentUpvotes = current.upvotes
-      const nextUpvotes = next.upvotes
-      const currentComments = current.comments.length
-      const nextComments = next.comments.length
+      const currentUpvotes = current.upvotes;
+      const nextUpvotes = next.upvotes;
+      const currentComments = current.comments.length;
+      const nextComments = next.comments.length;
 
       if (name.toUpperCase() === "MOST UPVOTES") {
-        return nextUpvotes - currentUpvotes
+        return nextUpvotes - currentUpvotes;
       } else if (name.toUpperCase() === "LEAST UPVOTES") {
-        return currentUpvotes - nextUpvotes
+        return currentUpvotes - nextUpvotes;
       } else if (name.toUpperCase() === "MOST COMMENTS") {
-        return nextComments - currentComments
+        return nextComments - currentComments;
       } else {
-        return currentComments - nextComments
+        return currentComments - nextComments;
       }
-    })
-    setFeedbackData(sortedFeedbackData)
-
+    });
+    setFeedbackData(sortedFeedbackData);
   }
 
   return (
@@ -174,8 +178,10 @@ export default function Home({ feedback, categories }) {
                 <Image src="images/bulb.svg" width={24} height={24} alt="Bulb" className="mr-4 hidden lg:block" />
                 <p className="mr-6 font-bold hidden sm:block">6 Suggestions</p>
                 <div className="flex items-center">
-                  <label id="sortBy" className="hidden sm:inline-block">Sort by:</label>
-                  <select onMouseUp={(e) => sortBy(e)} name="sortBy" className="inline-flex w-full justify-center gap-x-1.5 rounded-lg px-3 py-2 text-md text-white font-semibold bg-transparent">
+                  <label id="sortBy" className="hidden sm:inline-block">
+                    Sort by:
+                  </label>
+                  <select onMouseUp={(e) => sortBy(e)} name="sortBy" className="inline-flex justify-center gap-x-1.5 rounded-lg px-3 py-2 text-md text-white font-semibold bg-transparent">
                     <option value="Most Upvotes">Most Upvotes</option>
                     <option value="Least Upvotes">Least Upvotes</option>
                     <option value="Most Comments">Most Comments</option>
