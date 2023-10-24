@@ -8,6 +8,7 @@ import { getFeedback, feedback as sendFeedback } from "@/services/feedback";
 import { getCategory } from "@/services/category";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
 
 export default function feedback() {
   const [feedbackCharacters, setFeedbackCharacters] = useState(0);
@@ -33,8 +34,6 @@ export default function feedback() {
     if (type === "edit") {
       getFeedback(feedbackId)
         .then((data) => {
-          setLoading(true);
-
           const feedbackForForm = data.feedback;
           feedbackForForm.category = feedbackForForm.category.id;
           feedbackForForm.status = feedbackForForm.status.id;
@@ -49,6 +48,8 @@ export default function feedback() {
         
         .catch((error) => console.error(error))
         .finally(() => setLoading(false));
+    } else {
+      setLoading(false)
     }
   }, [feedbackId]);
 
@@ -66,16 +67,16 @@ export default function feedback() {
     })();
   }
 
-  if (loading) { 
-    return (
-      <div>
-        <h1>Loading</h1>
-      </div>
-    )
-  }
-
   return (
     <FormContainer heading={`${type === "create" ? "Create New Feedback" : "Edit Feedback"}`} iconPath={"/images/plus-icon.svg"} IconAlt={"Plus icon"}>
+      {loading ? (
+        <div className="flex justify-center">
+          <ClipLoader
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
+      ) : (
       <form autoComplete="off">
         {/* Title */}
         <div className="mb-5">
@@ -190,6 +191,7 @@ export default function feedback() {
           </div>
         </div>
       </form>
+      )}
     </FormContainer>
   );
 }
