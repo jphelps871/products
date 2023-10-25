@@ -4,10 +4,10 @@ import Image from "next/image";
 import FeedBackButton from "@/components/FeedBackButton";
 import CardFeedback from "@/components/CardFeedback";
 import Link from "next/link";
-import Login from "@/components/Login";
 import Categories from "@/components/Categories";
 import prisma from "./api/prisma/prisma";
 import { allFeedback } from "@/lib/prismaQueries/feedback";
+import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useState } from "react";
 
 export async function getStaticProps() {
@@ -30,6 +30,8 @@ export async function getStaticProps() {
 export default function Home({ feedback, categories }) {
   const [displayMenu, setDisplayMenu] = useState(false);
   const [feedbackData, setFeedbackData] = useState(feedback);
+  const supabase = useSupabaseClient();
+  const user = useUser();
 
   // Call API to get feedback filtered by category
   async function handleClick(e) {
@@ -163,7 +165,22 @@ export default function Home({ feedback, categories }) {
                 </Card>
 
                 <Card tailwindStyles={"sm:block bg-white rounded-lg"}>
-                  <Login />
+                  {user && <p className="font-bold text-md text-dark-grey mb-2">Hello, {user.user_metadata.name}</p>}
+
+                  {user ? (
+                    <button onClick={() => supabase.auth.signOut()} className="border-2 border-dark-grey w-full rounded-lg py-3 px-2 flex items-center justify-center hover:border-white hover:bg-dark-grey hover:text-white">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                      </svg>
+                      <p className="ml-2">Logout</p>
+                    </button>
+                  ) : (
+                    <Link href="/login">
+                      <button className="w-full rounded-lg py-3 px-2 flex items-center justify-center bg-dark-grey text-white hover:opacity-80">
+                        <p className="ml-2">Login</p>
+                      </button>
+                    </Link>
+                  )}
                 </Card>
               </div>
             </div>
