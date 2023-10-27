@@ -10,7 +10,11 @@ export default async function handler(req, res) {
   });
   if (user) return res.status(200).json({ data: "User exists" });
 
-  // Make sure username is unique if not, create new usernames
+  /* 
+    Make sure username is unique, if not, create a new username
+    until the username does not exist. Multiple loops
+    very unlikely
+  */
   let createdUsername = generateFromEmail(body.email, 3);
   let isUsernameUnique = false;
 

@@ -9,20 +9,26 @@ export async function authoriseWithProvider(provider, supabase) {
   });
 
   if (error) return error;
+
+  return {
+    data: {
+      message: "User added to Supabase",
+    },
+  };
 }
 
-export async function authoriseWithUserDetails(data, supabase) {
-  const { error } = await supabase.auth.signUp({
-    email: data.email,
-    password: data.password,
+export async function authoriseWithUserDetails(userData, supabase) {
+  const response = await supabase.auth.signUp({
+    email: userData.email,
+    password: userData.password,
     options: {
       data: {
-        name: data.name,
-        avatar: data.avatar,
-        username: data.username,
+        name: userData.name,
+        avatar_url: userData.avatar,
+        username: userData.username,
       },
     },
   });
 
-  if (error) return error;
+  return response;
 }

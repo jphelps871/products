@@ -1,20 +1,17 @@
 import FormContainer from "@/components/form/FormContainer"
-import randomEmail from "random-email";
 import generatePassword from "generate-password";
 import { uniqueNamesGenerator, adjectives, colors, animals } from "unique-names-generator";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { authoriseWithProvider, authoriseWithUserDetails } from "@/services/auth";
 import { AvatarGenerator } from 'random-avatar-generator';
 import { useState } from "react";
+import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { Tooltip } from 'react-tooltip'
 
 export default function login() {
-  const [helperText, setHelperText] = useState("")
   const supabase = useSupabaseClient();
-  const user = useUser()
-
-  console.log(user)
+  const router = useRouter();
 
   const {
     register,
@@ -23,8 +20,7 @@ export default function login() {
     formState: { errors },
   } = useForm();
 
-  const handleRandomLoginCredentials = async () => {
-    const email = randomEmail({ domain: "feedbackapp.com" });
+  const handleRandomLoginCredentials = () => {
     const password = generatePassword.generate({
       length: 10,
       numbers: true,
@@ -35,10 +31,7 @@ export default function login() {
       separator: ' ',
       style: 'capital'
     });
-
-    const emailUsername = email.split('@')[0]
-    const fullName = name.replace(' ', '')
-    const username = `@${fullName}_${emailUsername}`
+    const email = `${name.replace(' ', '_')}@feedbackapp.com`
 
     const generator = new AvatarGenerator();
     const avatar = generator.generateRandomAvatar();
@@ -48,26 +41,19 @@ export default function login() {
       email,
       password,
       avatar,
-      username
     })
-
-    setHelperText("Remember these details for next time you log in. Click \"Sign Up\" to finish the process.")
   };
 
-  const addUserToDatabase = async (userObj, formData = {}) => {
-
-    /*
-      I need to handle how data from the form (avatar, username etc..)
-      and simple auth login from google can interact.    
-    */ 
-
+  const addUserToDatabase = async (user) => {
     try {
 
-      await fetch("api/user", {
+      const response = await fetch("/api/user", {
         method: "POST",
         headers: { Accept: "application/json" },
-        body: JSON.stringify(userObj),
+        body: JSON.stringify(user),
       });
+
+      console.log(response);
 
     } catch (error) {
 
@@ -77,15 +63,19 @@ export default function login() {
   }
 
   const onProviderAuth = async (provider) => {
-    const response = await authoriseWithProvider(provider, supabase)
+    const {error, data} = await authoriseWithProvider(provider, supabase)
 
-    if (user) addUserToDatabase(user)
+    const response = await addUserToDatabase(data.user)
+
+    // router.push('/')
   }
 
-  const onFormSubmit = async (data) => {
-    const response = await authoriseWithUserDetails(data, supabase)
+  const onFormSubmit = async (userData) => {
+    const {error, data} = await authoriseWithUserDetails(userData, supabase)
 
-    if (user) addUserToDatabase(user, data)
+    const response = await addUserToDatabase(data.user)
+
+    // router.push('/')
   }
 
   return (
@@ -113,15 +103,6 @@ export default function login() {
         </p>
 
         {/* Hidden data */}
-        <div className="mb-2">
-          <input
-            id="username"
-            type="hidden"
-            className="hidden"
-            {...register("username")}
-          />
-        </div>
-
         <div className="mb-2">
           <input
             id="avatar"
@@ -180,6 +161,14 @@ export default function login() {
             className={`bg-light-cream mt-3 p-3 w-full rounded-lg ${errors.password && "border-2 border-red-500"}`}
             {...register("password", {
               required: "Password is required",
+              minLength : {
+                value: 7,
+                message: 'Must be more than 7 characters'
+              },
+              maxLength : {
+                value: 60,
+                message: 'Cannot be over 60 characters'
+              }
             })}
           />
           {errors.password && (

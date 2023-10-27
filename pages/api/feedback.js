@@ -29,7 +29,7 @@ export default async function handler(req, res) {
     if (JSON.stringify(validationErrors) !== "{}") {
       res.status(400).json({ validationErrors });
     }
-
+    console.log(body);
     /**
      * "12183309418-23491234" is the user ID of default user, when a user
      * is not logged in, the feedback will be created as if byt this user

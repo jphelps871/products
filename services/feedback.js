@@ -4,7 +4,7 @@ export function getFeedback(feedbackId) {
   }).then((response) => response.json());
 }
 
-export function feedback(method, data, feedbackId) {
+export async function feedback(method, data, feedbackId) {
   const options = {};
   let route = "/api/feedback";
 
@@ -23,5 +23,12 @@ export function feedback(method, data, feedbackId) {
     options["body"] = JSON.stringify(data);
   }
 
-  return fetch(route, options).then((response) => response.json());
+  try {
+    const response = await fetch(route, options);
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.error(error);
+    throw error; // You can re-throw the error to handle it at the caller level
+  }
 }
