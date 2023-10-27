@@ -1,22 +1,25 @@
 import FormContainer from "@/components/form/FormContainer"
 import generatePassword from "generate-password";
 import { uniqueNamesGenerator, adjectives, colors, animals } from "unique-names-generator";
-import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { authoriseWithProvider, authoriseWithUserDetails } from "@/services/auth";
 import { AvatarGenerator } from 'random-avatar-generator';
-import { useState } from "react";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { Tooltip } from 'react-tooltip'
+import { useState } from "react";
 
 export default function login() {
   const supabase = useSupabaseClient();
   const router = useRouter();
+  const [unknownError, setUnknownError] = useState("")
+  const [displayLogin, setDisplayLogin] = useState(false)
 
   const {
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors },
   } = useForm();
 
@@ -53,8 +56,6 @@ export default function login() {
         body: JSON.stringify(user),
       });
 
-      console.log(response);
-
     } catch (error) {
 
       console.error(error);
@@ -64,18 +65,45 @@ export default function login() {
 
   const onProviderAuth = async (provider) => {
     const {error, data} = await authoriseWithProvider(provider, supabase)
-
     const response = await addUserToDatabase(data.user)
-
-    // router.push('/')
   }
 
   const onFormSubmit = async (userData) => {
+    if (displayLogin) {
+      signInWithEmail(userData)
+      return
+    } 
+
     const {error, data} = await authoriseWithUserDetails(userData, supabase)
 
-    const response = await addUserToDatabase(data.user)
+    if (!error) {
+      const response = await addUserToDatabase(data.user)
+      router.push('/')
+    } else {
 
-    // router.push('/')
+      if (error.message.toUpperCase() == 'USER ALREADY REGISTERED') {
+        setError('email', {type: 'string', message: error.message})
+      } else {
+        setUnknownError(error?.message)
+      }
+
+    }
+
+  }
+
+  const signInWithEmail = async (userData) => {
+    const {email, password} = userData
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+
+    if (error) {
+      setError('email', {type: 'string', message: "email or password incorrect"})
+      setError('password', {type: 'string', message: "email or password incorrect"})
+    } else {
+      router.push('/')
+    }
   }
 
   return (
@@ -96,11 +124,19 @@ export default function login() {
 
       {/* Standard login */}
       <form autoComplete="off" className="mt-8" onSubmit={handleSubmit(onFormSubmit)}>
-        <p className="text-md mb-3">
-          Recommend using <b>automatically fill</b> when filling out the below form. 
-          This is a working project, it is not meant for commercial purposes. Therefore, it does not matter
-          if email and password are meaningless.
-        </p>
+        {!unknownError ? (
+          <p className="text-md mb-3">
+            Recommend using <b>automatically fill</b> when filling out the below form.
+          </p>
+        ) : (
+          <p className="text-md mb-3 text-red-500">
+            {unknownError}
+          </p>
+        )}
+
+          <p className="text-md mb-3">
+            Have an account? <span onClick={() => setDisplayLogin(!displayLogin)} className="font-bold text-dark-purple cursor-pointer">{displayLogin ? 'Sign up' : 'Log in'}</span>
+          </p>
 
         {/* Hidden data */}
         <div className="mb-2">
@@ -113,6 +149,7 @@ export default function login() {
         </div>
 
         {/* Visible data */}
+        {!displayLogin && (
         <div className="mb-2">
           <label htmlFor="name" className="text-dark-grey font-bold mt-10">
             Full name
@@ -131,6 +168,7 @@ export default function login() {
             </p>
           )}
         </div>
+        )}
 
         <div className="mb-2">
           <label htmlFor="email" className="text-dark-grey font-bold mt-10">
@@ -157,7 +195,7 @@ export default function login() {
           </label>
           <input
             id="password"
-            type="text"
+            type={displayLogin ? 'password' : 'text'}
             className={`bg-light-cream mt-3 p-3 w-full rounded-lg ${errors.password && "border-2 border-red-500"}`}
             {...register("password", {
               required: "Password is required",
@@ -180,13 +218,18 @@ export default function login() {
 
         <div>
           <button type="submit" className={`bg-dark-purple sm:px-5 px-4 py-3 hover:opacity-80 text-white rounded-lg font-bold text-sm sm:text-md`}>
-            Sign Up
+          {displayLogin ? 'Log in' : 'Sign Up'}
           </button>
 
-          <button onClick={handleRandomLoginCredentials}  data-tooltip-id="my-tooltip" type="button" data-tooltip-content="Creates a random email and password" className="bg-orange sm:px-5 px-4 py-3 hover:opacity-80 text-white rounded-lg font-bold text-sm sm:text-md ml-3 relative">
-            Automatically fill
-          </button>
-          <Tooltip id="my-tooltip" />
+          {!displayLogin && (
+          <>
+            <button onClick={handleRandomLoginCredentials}  data-tooltip-id="my-tooltip" type="button" data-tooltip-content="Creates a random email and password" className="bg-orange sm:px-5 px-4 py-3 hover:opacity-80 text-white rounded-lg font-bold text-sm sm:text-md ml-3 relative">
+              Automatically fill
+            </button>
+            <Tooltip id="my-tooltip" />
+          </>
+          )}
+          
         </div>
 
 
