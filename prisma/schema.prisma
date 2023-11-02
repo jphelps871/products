@@ -48,12 +48,13 @@ model Comment {
 model Feedback {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
-  upvotes   Int      @default(0)
+  // upvotes   Int      @default(0)
   updatedAt DateTime @updatedAt
   title     String   @db.VarChar(255)
   detail    String   @db.VarChar(255)
 
   comments Comment[]
+  upvotes  Upvote[]
 
   author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
@@ -72,6 +73,18 @@ model User {
   name     String
   avatar   String
   role     Role       @default(USER)
+  upvotes  Upvote[]
   feedback Feedback[]
   Comment  Comment[]
+}
+
+model Upvote {
+  userId     String
+  feedbackId Int
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  feedback   Feedback @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+
+  @@id([userId, feedbackId])
+  @@index([userId])
+  @@index([feedbackId])
 }

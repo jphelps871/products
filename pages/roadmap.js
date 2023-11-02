@@ -11,9 +11,6 @@ import { useState } from "react";
 export async function getStaticProps() {
   const feedbackData = await prisma.feedback.findMany({
     select: allFeedback,
-    orderBy: {
-      upvotes: "desc",
-    },
   });
 
   let planned = [];

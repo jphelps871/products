@@ -1,4 +1,3 @@
-import supabase from "@/utils/supabase";
 import { useEffect } from "react";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 

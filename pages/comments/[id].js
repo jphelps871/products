@@ -111,7 +111,7 @@ export default function CommentPage({ feedback }) {
         </div>
 
         <div className="flex flex-col gap-5 mt-5">
-          <CardFeedback category={feedback.category.name} upvoteNumber={feedback.upvotes} heading={feedback.title} body={feedback.detail} commentsNumber={commentsLength} />
+          <CardFeedback feedbackId={feedback.id} category={feedback.category.name} upvoteNumber={feedback.upvotes.length} heading={feedback.title} body={feedback.detail} commentsNumber={commentsLength} />
 
           {isLoading ? (
             <h1>Loading...</h1>

@@ -14,9 +14,9 @@ export async function getStaticProps() {
   const categories = await prisma.category.findMany();
   const feedback = await prisma.feedback.findMany({
     select: allFeedback,
-    orderBy: {
-      upvotes: "desc",
-    },
+    // orderBy: {
+    //   upvotes: "desc",
+    // },
   });
 
   return {
@@ -217,7 +217,7 @@ export default function Home({ feedback, categories }) {
             <div className="flex flex-col gap-4 mt-3 mx-2 sm:mx-0">
               {feedbackData.map((data) => (
                 <Link key={data.id} href={`/comments/${data.id}`}>
-                  <CardFeedback category={data.category.name} upvoteNumber={data.upvotes} heading={data.title} body={data.detail} commentsNumber={data.comments.length} />
+                  <CardFeedback category={data.category.name} upvoteNumber={data.upvotes.length} heading={data.title} body={data.detail} commentsNumber={data.comments.length} feedbackId={data.id} />
                 </Link>
               ))}
             </div>
