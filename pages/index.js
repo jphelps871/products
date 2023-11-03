@@ -14,9 +14,11 @@ export async function getStaticProps() {
   const categories = await prisma.category.findMany();
   const feedback = await prisma.feedback.findMany({
     select: allFeedback,
-    // orderBy: {
-    //   upvotes: "desc",
-    // },
+    orderBy: {
+      upvotes: {
+        _count: "asc",
+      },
+    },
   });
 
   return {

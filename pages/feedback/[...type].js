@@ -55,10 +55,10 @@ export default function feedback() {
   function handleClickSubmit(event) {
     event.preventDefault();
     const method = event.target.name;
-  
+
     // Call handleSubmit here to trigger the form submission
     handleSubmit(async (data) => {
-      const response = await sendFeedback(method, data, feedbackId)
+      const response = await sendFeedback(method, data, feedbackId);
       toast.success(response.message);
       router.push("/");
     })();
@@ -182,7 +182,6 @@ export default function feedback() {
                 {type === "create" ? "Add Feedback" : "Edit Feedback"}
               </button>
             </div>
-
           </div>
         </form>
       )}

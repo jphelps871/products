@@ -48,7 +48,6 @@ model Comment {
 model Feedback {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
-  // upvotes   Int      @default(0)
   updatedAt DateTime @updatedAt
   title     String   @db.VarChar(255)
   detail    String   @db.VarChar(255)
@@ -56,8 +55,8 @@ model Feedback {
   comments Comment[]
   upvotes  Upvote[]
 
-  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId String
+  author   User?   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId String?
 
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId Int

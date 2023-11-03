@@ -30,22 +30,16 @@ export default async function handler(req, res) {
       res.status(400).json({ validationErrors });
     }
 
-    /**
-     * "12183309418-23491234" is the user ID of default user, when a user
-     * is not logged in, the feedback will be created as if byt this user
-     */
-    const userId = body.userId ? body.userId : "12183309418-23491234";
+    const data = {
+      title: body.title,
+      detail: body.detail,
+      categoryId: parseInt(body.category),
+      statusId: 1,
+      authorId: body?.userId,
+    };
 
     try {
-      await prisma.feedback.create({
-        data: {
-          title: body.title,
-          detail: body.detail,
-          categoryId: parseInt(body.category),
-          statusId: 1,
-          authorId: userId,
-        },
-      });
+      await prisma.feedback.create({ data });
 
       res.status(200).json({ message: "Feedback added" });
     } catch (error) {
