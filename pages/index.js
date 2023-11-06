@@ -8,7 +8,7 @@ import Categories from "@/components/Categories";
 import prisma from "./api/prisma/prisma";
 import { allFeedback } from "@/lib/prismaQueries/feedback";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export async function getStaticProps() {
   const categories = await prisma.category.findMany();
@@ -16,7 +16,7 @@ export async function getStaticProps() {
     select: allFeedback,
     orderBy: {
       upvotes: {
-        _count: "asc",
+        _count: "desc",
       },
     },
   });
@@ -38,35 +38,27 @@ export default function Home({ feedback, categories }) {
   // Call API to get feedback filtered by category
   async function handleClick(e) {
     const name = e.target.innerText;
+
     const response = await fetch(`api/feedback?category=${name}`, {
       method: "GET",
       header: { Accept: "application/json" },
     });
     const feedbackByCategory = await response.json();
+
     setFeedbackData(feedbackByCategory.feedback);
   }
 
-  function sortBy(e) {
-    // Find current sort by, if it is already matching do nothing
+  // Call API to sort by
+  async function sortBy(e) {
     const name = e.target.value;
 
-    const sortedFeedbackData = [...feedbackData].sort((current, next) => {
-      const currentUpvotes = current.upvotes;
-      const nextUpvotes = next.upvotes;
-      const currentComments = current.comments.length;
-      const nextComments = next.comments.length;
-
-      if (name.toUpperCase() === "MOST UPVOTES") {
-        return nextUpvotes - currentUpvotes;
-      } else if (name.toUpperCase() === "LEAST UPVOTES") {
-        return currentUpvotes - nextUpvotes;
-      } else if (name.toUpperCase() === "MOST COMMENTS") {
-        return nextComments - currentComments;
-      } else {
-        return currentComments - nextComments;
-      }
+    const response = await fetch(`api/feedback?sort=${name}`, {
+      method: "GET",
+      header: { Accept: "application/json" },
     });
-    setFeedbackData(sortedFeedbackData);
+    const feedbackBySorting = await response.json();
+
+    setFeedbackData(feedbackBySorting.feedback);
   }
 
   return (
@@ -219,7 +211,7 @@ export default function Home({ feedback, categories }) {
             <div className="flex flex-col gap-4 mt-3 mx-2 sm:mx-0">
               {feedbackData.map((data) => (
                 <Link key={data.id} href={`/comments/${data.id}`}>
-                  <CardFeedback category={data.category.name} upvoteNumber={data.upvotes.length} heading={data.title} body={data.detail} commentsNumber={data.comments.length} feedbackId={data.id} />
+                  <CardFeedback feedback={data} />
                 </Link>
               ))}
             </div>

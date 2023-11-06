@@ -83,17 +83,17 @@ export default function feedback() {
               onKeyUp={(e) => setFeedbackCharacters(e.target.value.length)}
               id="title"
               type="text"
-              maxLength="60"
+              maxLength="150"
               className={`bg-light-cream mt-3 p-3 w-full rounded-lg ${errors.title && "border-2 border-red-500"}`}
               {...register("title", {
                 required: "Title is required",
                 maxLength: {
-                  value: 60,
-                  message: "Must be less than 60 characters",
+                  value: 150,
+                  message: "Must be less than 150 characters",
                 },
               })}
             />
-            <FormCharactersContainer count={feedbackCharacters} limit={60} />
+            <FormCharactersContainer count={feedbackCharacters} limit={150} />
             {errors.title && (
               <p className="text-red-500 mt-1" role="alert">
                 {errors.title?.message}
@@ -145,17 +145,17 @@ export default function feedback() {
               id="detail"
               type="text"
               rows="4"
-              maxLength="100"
+              maxLength="450"
               className={`bg-light-cream mt-3 p-3 w-full rounded-lg ${errors.detail && "border-2 border-red-500"}`}
               {...register("detail", {
                 required: "Detail on feedback is required",
                 maxLength: {
-                  value: 100,
-                  message: "Must be less than 100 characters",
+                  value: 450,
+                  message: "Must be less than 450 characters",
                 },
               })}
             />
-            <FormCharactersContainer count={detailCharacters} limit={100} />
+            <FormCharactersContainer count={detailCharacters} limit={450} />
             {errors.detail && (
               <p className="text-red-500 mt-1" role="alert">
                 {errors.detail?.message}

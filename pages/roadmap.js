@@ -55,7 +55,7 @@ export default function Roadmap({ feedbackData }) {
             <h1 className="mt-2 font-bold sm:text-2xl text-xl">Roadmap</h1>
           </div>
           <div className="ml-auto">
-            <FeedBackButton bgColor={"dark-purple"}>+ Add Feedback</FeedBackButton>
+            <FeedBackButton bgColor={"bg-dark-purple"}>+ Add Feedback</FeedBackButton>
           </div>
         </div>
       </Card>
@@ -83,7 +83,7 @@ export default function Roadmap({ feedbackData }) {
           {feedbackData.planned.map((data) => (
             <Link key={data.id} href={`/comments/${data.id}`}>
               <RoadmapContainer status={data.status.name} color={"orange"}>
-                <CardFeedback roadmap={true} category={data.category.name} upvoteNumber={data.upvotes} heading={data.title} body={data.detail} commentsNumber={data.comments.length} />
+                <CardFeedback roadmap={true} feedback={data} />
               </RoadmapContainer>
             </Link>
           ))}
@@ -98,7 +98,7 @@ export default function Roadmap({ feedbackData }) {
           {feedbackData.inProgress.map((data) => (
             <Link key={data.id} href={`/comments/${data.id}`}>
               <RoadmapContainer status={data.status.name} color={"dark-purple"}>
-                <CardFeedback roadmap={true} category={data.category.name} upvoteNumber={data.upvotes} heading={data.title} body={data.detail} commentsNumber={data.comments.length} />
+                <CardFeedback roadmap={true} feedback={data} />
               </RoadmapContainer>
             </Link>
           ))}
@@ -113,7 +113,7 @@ export default function Roadmap({ feedbackData }) {
           {feedbackData.live.map((data) => (
             <Link key={data.id} href={`/comments/${data.id}`}>
               <RoadmapContainer status={data.status.name} color={"light-blue"}>
-                <CardFeedback roadmap={true} category={data.category.name} upvoteNumber={data.upvotes} heading={data.title} body={data.detail} commentsNumber={data.comments.name} />
+                <CardFeedback roadmap={true} feedback={data} />
               </RoadmapContainer>
             </Link>
           ))}

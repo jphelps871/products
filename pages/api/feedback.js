@@ -1,52 +1,43 @@
 import prisma from "./prisma/prisma";
 import { allFeedback } from "@/lib/prismaQueries/feedback";
+import * as Validator from "validatorjs";
 
-function validateFeedback(title, detail, category) {
-  const validationErrors = {};
+async function createFeedback(req, res) {
+  const body = JSON.parse(req.body);
 
-  if (!title || title.trim().length === 0) {
-    validationErrors["title"] = "Title cannot be empty";
-  } else if (title.length > 60) {
-    validationErrors["title"] = "Must be less than 60 characters";
-  }
-  if (!detail || detail.trim().detail === 0) {
-    validationErrors["detail"] = "Detail cannot be empty";
-  } else if (title.detail > 100) {
-    validationErrors["detail"] = "Must be less than 100 characters";
-  }
-  if (!category) {
-    validationErrors["category"] = "Category cannot be empty";
+  // Validation
+  const validation = new Validator(body, {
+    title: "required|max:150",
+    detail: "required|max:450",
+    category: "required",
+  });
+
+  if (validation.fails()) {
+    res.status(400).json(validation.errors);
   }
 
-  return validationErrors;
+  // Create data for send via Prisma
+  const data = {
+    title: body.title,
+    detail: body.detail,
+    categoryId: parseInt(body.category),
+    statusId: 1, // "Planned"
+    authorId: body.userId,
+  };
+
+  try {
+    await prisma.feedback.create({ data });
+    res.status(200).json({ message: "Feedback added" });
+  } catch (error) {
+    res.status(400).json({ error });
+  }
 }
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
-    const body = JSON.parse(req.body);
-    const validationErrors = validateFeedback(body?.title || "", body?.detail || "", body?.category || "");
-
-    if (JSON.stringify(validationErrors) !== "{}") {
-      res.status(400).json({ validationErrors });
-    }
-
-    const data = {
-      title: body.title,
-      detail: body.detail,
-      categoryId: parseInt(body.category),
-      statusId: 1,
-      authorId: body?.userId,
-    };
-
-    try {
-      await prisma.feedback.create({ data });
-
-      res.status(200).json({ message: "Feedback added" });
-    } catch (error) {
-      res.status(400).json({ error });
-    }
+    createFeedback(req, res);
   } else if (req.method === "GET") {
-    const { feedbackId, category } = req.query;
+    const { feedbackId, category, sort } = req.query;
 
     try {
       let feedback = null;
@@ -65,6 +56,37 @@ export default async function handler(req, res) {
           findManyObj.where = {
             category: {
               name: category,
+            },
+          };
+        }
+
+        feedback = await prisma.feedback.findMany(findManyObj);
+      } else if (sort) {
+        const findManyObj = { select: allFeedback };
+        const sortBy = sort.toUpperCase();
+
+        if (sortBy == "MOST COMMENTS") {
+          findManyObj.orderBy = {
+            comments: {
+              _count: "desc",
+            },
+          };
+        } else if (sortBy == "LEAST COMMENTS") {
+          findManyObj.orderBy = {
+            comments: {
+              _count: "asc",
+            },
+          };
+        } else if (sortBy == "MOST UPVOTES") {
+          findManyObj.orderBy = {
+            upvotes: {
+              _count: "desc",
+            },
+          };
+        } else {
+          findManyObj.orderBy = {
+            upvotes: {
+              _count: "asc",
             },
           };
         }

@@ -10,6 +10,7 @@ import BackLink from "@/components/BackLink";
 import supabase from "@/utils/supabase";
 import Link from "next/link";
 import { getComments } from "@/services/getComments";
+import { allFeedback } from "@/lib/prismaQueries/feedback";
 import { useEffect, useState } from "react";
 
 function buildCommentTree(comments) {
@@ -39,17 +40,7 @@ export async function getServerSideProps(context) {
     where: {
       id: parseInt(id),
     },
-    select: {
-      id: true,
-      upvotes: true,
-      title: true,
-      detail: true,
-      category: {
-        select: {
-          name: true,
-        },
-      },
-    },
+    select: allFeedback,
   });
 
   return { props: { feedback } };
@@ -111,7 +102,7 @@ export default function CommentPage({ feedback }) {
         </div>
 
         <div className="flex flex-col gap-5 mt-5">
-          <CardFeedback feedbackId={feedback.id} category={feedback.category.name} upvoteNumber={feedback.upvotes.length} heading={feedback.title} body={feedback.detail} commentsNumber={commentsLength} />
+          <CardFeedback feedback={feedback} />
 
           {isLoading ? (
             <h1>Loading...</h1>
