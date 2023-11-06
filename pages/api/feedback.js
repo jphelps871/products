@@ -114,10 +114,15 @@ export default async function handler(req, res) {
     res.status(200).json({ message: "Feedback deleted" });
   } else if (req.method === "PUT") {
     const body = JSON.parse(req.body);
-    const validationErrors = validateFeedback(body?.title || "", body?.detail || "", body?.category || "");
 
-    if (JSON.stringify(validationErrors) !== "{}") {
-      res.status(400).json({ validationErrors });
+    const validation = new Validator(body, {
+      title: "required|max:150",
+      detail: "required|max:450",
+      category: "required",
+    });
+
+    if (validation.fails()) {
+      res.status(400).json(validation.errors);
     }
 
     try {
