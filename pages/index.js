@@ -8,7 +8,7 @@ import Categories from "@/components/Categories";
 import prisma from "./api/prisma/prisma";
 import { allFeedback } from "@/lib/prismaQueries/feedback";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 export async function getStaticProps() {
   const categories = await prisma.category.findMany();
@@ -20,16 +20,28 @@ export async function getStaticProps() {
       },
     },
   });
+  const status = await prisma.status.findMany({
+    select: {
+      name: true,
+      feedback: {
+        select: {
+          title: true,
+        },
+      },
+    },
+  });
 
+  // Get numbers for Planned, In Progress and Live jobs
   return {
     props: {
       feedback,
       categories,
+      status,
     },
   };
 }
 
-export default function Home({ feedback, categories }) {
+export default function Home({ feedback, categories, status }) {
   const [displayMenu, setDisplayMenu] = useState(false);
   const [feedbackData, setFeedbackData] = useState(feedback);
   const supabase = useSupabaseClient();
@@ -139,21 +151,21 @@ export default function Home({ feedback, categories }) {
                         <span className="mr-2 w-2 h-2 rounded-full bg-orange inline-block"></span>
                         Planned
                       </p>
-                      <p className="font-bold">2</p>
+                      <p className="font-bold">{status[0].feedback.length}</p>
                     </div>
                     <div className="flex justify-between mb-1 text-light-slate">
                       <p className="flex items-center">
                         <span className="mr-2 w-2 h-2 rounded-full bg-dark-purple inline-block"></span>
                         In-Progress
                       </p>
-                      <p className="font-bold">3</p>
+                      <p className="font-bold">{status[1].feedback.length}</p>
                     </div>
                     <div className="flex justify-between mb-1 text-light-slate">
                       <p className="flex items-center">
                         <span className="mr-2 w-2 h-2 rounded-full bg-light-blue inline-block"></span>
                         Live
                       </p>
-                      <p className="font-bold">1</p>
+                      <p className="font-bold">{status[2].feedback.length}</p>
                     </div>
                   </div>
                 </Card>

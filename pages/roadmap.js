@@ -9,30 +9,26 @@ import Link from "next/link";
 import { useState } from "react";
 
 export async function getStaticProps() {
-  const feedbackData = await prisma.feedback.findMany({
-    select: allFeedback,
+  const groupedFeedback = await prisma.status.findMany({
+    select: {
+      name: true,
+      feedback: {
+        select: allFeedback,
+      },
+    },
   });
 
-  let planned = [];
-  let inProgress = [];
-  let live = [];
-
-  feedbackData.forEach((feedback) => {
-    if (feedback.status.name.toLowerCase() === "planned") {
-      planned.push(feedback);
-    } else if (feedback.status.name.toLowerCase() === "in-progress") {
-      inProgress.push(feedback);
-    } else if (feedback.status.name.toLowerCase() === "live") {
-      live.push(feedback);
-    }
-  });
+  // Improving readability
+  const PlannedIdx = 0;
+  const InProgressIdx = 1;
+  const liveIdx = 2;
 
   return {
     props: {
       feedbackData: {
-        planned: planned,
-        inProgress: inProgress,
-        live: live,
+        planned: groupedFeedback[PlannedIdx].feedback,
+        inProgress: groupedFeedback[InProgressIdx].feedback,
+        live: groupedFeedback[liveIdx].feedback,
       },
     },
   };

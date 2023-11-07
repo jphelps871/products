@@ -1,4 +1,3 @@
-// import { createPathsObject, getFeedbackById } from '../../lib/localData'
 import Head from "next/head";
 import prisma from "../api/prisma/prisma";
 import CommentForm from "@/components/CommentForm";
@@ -82,7 +81,7 @@ export default function CommentPage({ feedback }) {
     )
     .subscribe();
 
-  //   channel.unsubscribe();
+  channel.unsubscribe();
 
   return (
     <>
