@@ -44,12 +44,16 @@ export async function getStaticProps() {
 export default function Home({ feedback, categories, status }) {
   const [displayMenu, setDisplayMenu] = useState(false);
   const [feedbackData, setFeedbackData] = useState(feedback);
+  const [categoryName, setCategoryName] = useState("All");
+  const [loading, setLoading] = useState(false);
   const supabase = useSupabaseClient();
   const user = useUser();
 
   // Call API to get feedback filtered by category
   async function handleClick(e) {
+    setLoading(true);
     const name = e.target.innerText;
+    setCategoryName(name);
 
     const response = await fetch(`api/feedback?category=${name}`, {
       method: "GET",
@@ -58,6 +62,7 @@ export default function Home({ feedback, categories, status }) {
     const feedbackByCategory = await response.json();
 
     setFeedbackData(feedbackByCategory.feedback);
+    setLoading(false);
   }
 
   // Call API to sort by
@@ -220,13 +225,33 @@ export default function Home({ feedback, categories, status }) {
               </div>
             </Card>
 
-            <div className="flex flex-col gap-4 mt-3 mx-2 sm:mx-0">
-              {feedbackData.map((data) => (
-                <Link key={data.id} href={`/comments/${data.id}`}>
-                  <CardFeedback feedback={data} />
-                </Link>
-              ))}
-            </div>
+            {loading ? (
+              "Loading"
+            ) : (
+              <div className="flex flex-col gap-4 mt-3 mx-2 sm:mx-0">
+                {feedbackData.map((data) => (
+                  <Link key={data.id} href={`/comments/${data.id}`}>
+                    <CardFeedback feedback={data} />
+                  </Link>
+                ))}
+                {feedbackData.length === 0 && (
+                  <Card tailwindStyles={"rounded-lg bg-white"}>
+                    <div className="flex justify-center">
+                      <div className="my-16 w-1/2">
+                        <div className="flex justify-center">
+                          <Image src={"images/nothing-icon.svg"} width={200} height={200} />
+                        </div>
+                        <div className="text-center">
+                          <h3 className="font-bold text-xl my-6">There is no feedback yet.</h3>
+                          <p className="mb-4">{categoryName == "All" ? "Got a suggestion? Found a bug that needs to be squashed? We love hearing about new ideas to improve our app." : `Oops, there is nothing for ${categoryName}, click + Add Feedback and select ${categoryName} to add feedback for this category`}</p>
+                          <FeedBackButton bgColor={"bg-dark-purple"}>+ Add Feedback</FeedBackButton>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </main>
