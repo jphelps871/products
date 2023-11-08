@@ -9,6 +9,7 @@ import prisma from "./api/prisma/prisma";
 import { allFeedback } from "@/lib/prismaQueries/feedback";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import React, { useState } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
 
 export async function getStaticProps() {
   const categories = await prisma.category.findMany();
@@ -226,7 +227,9 @@ export default function Home({ feedback, categories, status }) {
             </Card>
 
             {loading ? (
-              "Loading"
+              <div className="flex justify-center p-5">
+                <ClipLoader aria-label="Loading Spinner" data-testid="loader" /> 
+              </div>
             ) : (
               <div className="flex flex-col gap-4 mt-3 mx-2 sm:mx-0">
                 {feedbackData.map((data) => (
