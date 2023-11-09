@@ -205,12 +205,12 @@ export default function Home({ feedback, categories, status }) {
             <Card tailwindStyles={"sm:rounded-lg bg-slate text-white"}>
               <div className="flex items-center">
                 <Image src="images/bulb.svg" width={24} height={24} alt="Bulb" className="mr-4 hidden lg:block" />
-                <p className="mr-6 font-bold hidden sm:block">6 Suggestions</p>
+                <p className="mr-6 font-bold hidden sm:block">{feedbackData?.length} Suggestions</p>
                 <div className="flex items-center">
                   <label id="sortBy" className="hidden sm:inline-block">
                     Sort by:
                   </label>
-                  <select onMouseUp={(e) => sortBy(e)} name="sortBy" className="inline-flex justify-center gap-x-1.5 rounded-lg px-3 py-2 text-md text-white font-semibold bg-transparent">
+                  <select onMouseUp={(e) => sortBy(e)} name="sortBy" className="inline-flex justify-center gap-x-1.5 rounded-lg px-3 py-2 text-md font-semibold bg-transparent">
                     <option value="Most Upvotes">Most Upvotes</option>
                     <option value="Least Upvotes">Least Upvotes</option>
                     <option value="Most Comments">Most Comments</option>
@@ -228,7 +228,7 @@ export default function Home({ feedback, categories, status }) {
 
             {loading ? (
               <div className="flex justify-center p-5">
-                <ClipLoader aria-label="Loading Spinner" data-testid="loader" /> 
+                <ClipLoader aria-label="Loading Spinner" data-testid="loader" />
               </div>
             ) : (
               <div className="flex flex-col gap-4 mt-3 mx-2 sm:mx-0">
@@ -247,7 +247,9 @@ export default function Home({ feedback, categories, status }) {
                         <div className="text-center">
                           <h3 className="font-bold text-xl my-6">There is no feedback yet.</h3>
                           <p className="mb-4">{categoryName == "All" ? "Got a suggestion? Found a bug that needs to be squashed? We love hearing about new ideas to improve our app." : `Oops, there is nothing for ${categoryName}, click + Add Feedback and select ${categoryName} to add feedback for this category`}</p>
-                          <FeedBackButton bgColor={"bg-dark-purple"}>+ Add Feedback</FeedBackButton>
+                          <Link href="/feedback/create">
+                            <FeedBackButton bgColor={"bg-dark-purple"}>+ Add Feedback</FeedBackButton>
+                          </Link>
                         </div>
                       </div>
                     </div>
