@@ -51,7 +51,9 @@ export default function Roadmap({ feedbackData }) {
             <h1 className="mt-2 font-bold sm:text-2xl text-xl">Roadmap</h1>
           </div>
           <div className="ml-auto">
-            <FeedBackButton bgColor={"bg-dark-purple"}>+ Add Feedback</FeedBackButton>
+            <Link href="/feedback/create">
+              <FeedBackButton bgColor={"bg-dark-purple"}>+ Add Feedback</FeedBackButton>
+            </Link>
           </div>
         </div>
       </Card>

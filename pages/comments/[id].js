@@ -35,24 +35,27 @@ function buildCommentTree(comments) {
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
-  const feedback = await prisma.feedback.findUnique({
+  const feedbackData = await prisma.feedback.findUnique({
     where: {
       id: parseInt(id),
     },
     select: allFeedback,
   });
 
-  return { props: { feedback } };
+  return { props: { feedbackData } };
 }
 
-export default function CommentPage({ feedback }) {
+export default function CommentPage({ feedbackData }) {
   const [allComments, setComments] = useState();
+  const [feedback, setFeedback] = useState(feedbackData);
   const [commentsLength, setCommentsLength] = useState(0);
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     getComments(feedback.id).then((data) => {
       const comments = buildCommentTree(data.comments);
+
+      // Set states
       setCommentsLength(data.comments.length);
       setComments(comments);
       setLoading(false);
@@ -72,6 +75,16 @@ export default function CommentPage({ feedback }) {
         getComments(feedback.id)
           .then((data) => {
             const comments = buildCommentTree(data.comments);
+
+            // Update the number of comments shown in feedback component
+            const updatedFeedback = { ...feedback };
+            const updatedComments = [...updatedFeedback.comments];
+            updatedComments.push({ test: "test" });
+
+            updatedFeedback.comments = updatedComments;
+            setFeedback(updatedFeedback);
+            setCommentsLength(commentsLength + 1);
+
             setComments(comments);
           })
           .catch((error) => {
@@ -80,8 +93,6 @@ export default function CommentPage({ feedback }) {
       }
     )
     .subscribe();
-
-  channel.unsubscribe();
 
   return (
     <>

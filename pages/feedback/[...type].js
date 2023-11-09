@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { usePreviousUrlLocation } from "@/hooks/usePreviousLocation";
 import FormContainer from "@/components/form/FormContainer";
 import FeedBackButton from "@/components/FeedBackButton";
 import FormCharactersContainer from "@/components/form/FormCharactersContainer";
@@ -15,6 +16,7 @@ export default function feedback() {
   const [detailCharacters, setDetailCharacters] = useState(0);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const path = usePreviousUrlLocation();
 
   const router = useRouter();
   const [type, feedbackId] = router?.query?.type || ["", ""];
@@ -60,7 +62,7 @@ export default function feedback() {
     handleSubmit(async (data) => {
       const response = await sendFeedback(method, data, feedbackId);
       toast.success(response.message);
-      router.push("/");
+      router.push(path);
     })();
   }
 
