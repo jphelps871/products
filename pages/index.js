@@ -52,6 +52,7 @@ export default function Home({ feedback, categories, status }) {
 
   // Call API to get feedback filtered by category
   async function handleClick(e) {
+    console.log(e.target.innerText);
     setLoading(true);
     const name = e.target.innerText;
     setCategoryName(name);
@@ -138,6 +139,25 @@ export default function Home({ feedback, categories, status }) {
                     </div>
                   </div>
                 </Card>
+
+                <Card tailwindStyles={"sm:block mt-4 bg-white rounded-lg"}>
+                  {user && <p className="font-bold text-md text-dark-grey mb-2">Hello, {user.user_metadata.name}</p>}
+
+                  {user ? (
+                    <button onClick={() => supabase.auth.signOut()} className="border-2 border-dark-grey w-full rounded-lg py-3 px-2 flex items-center justify-center hover:border-white hover:bg-dark-grey hover:text-white">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                      </svg>
+                      <p className="ml-2">Logout</p>
+                    </button>
+                  ) : (
+                    <Link href="/login">
+                      <button className="w-full rounded-lg py-3 px-2 flex items-center justify-center bg-dark-grey text-white hover:opacity-80">
+                        <p className="ml-2">Login</p>
+                      </button>
+                    </Link>
+                  )}
+                </Card>
               </div>
 
               {/* Desktop */}
@@ -176,7 +196,7 @@ export default function Home({ feedback, categories, status }) {
                   </div>
                 </Card>
 
-                <Card tailwindStyles={"sm:block bg-white rounded-lg"}>
+                <Card tailwindStyles={"sm:block bg-white rounded-lg md:col-span-1 sm:col-span-2"}>
                   {user && <p className="font-bold text-md text-dark-grey mb-2">Hello, {user.user_metadata.name}</p>}
 
                   {user ? (
@@ -242,7 +262,7 @@ export default function Home({ feedback, categories, status }) {
                     <div className="flex justify-center">
                       <div className="my-16 w-1/2">
                         <div className="flex justify-center">
-                          <Image src={"images/nothing-icon.svg"} width={200} height={200} />
+                          <Image src={"images/nothing-icon.svg"} width={200} height={200} alt={"No feedback Icon"} />
                         </div>
                         <div className="text-center">
                           <h3 className="font-bold text-xl my-6">There is no feedback yet.</h3>
