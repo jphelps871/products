@@ -52,7 +52,6 @@ export default function Home({ feedback, categories, status }) {
 
   // Call API to get feedback filtered by category
   async function handleClick(e) {
-    console.log(e.target.innerText);
     setLoading(true);
     const name = e.target.innerText;
     setCategoryName(name);
@@ -111,9 +110,9 @@ export default function Home({ feedback, categories, status }) {
                 <Card tailwindStyles={"sm:block mt-4 bg-white rounded-lg"}>
                   <div className="flex justify-between mb-2">
                     <h3 className="font-bold text-md text-dark-grey">Roadmap</h3>
-                    <a href="/roadmap" className="underline text-sm text-dark-blue hover:text-light-blue">
+                    <Link href="/roadmap" className="underline text-sm text-dark-blue hover:text-light-blue">
                       View
-                    </a>
+                    </Link>
                   </div>
                   <div>
                     <div className="flex justify-between mb-1 text-light-slate">
@@ -167,9 +166,9 @@ export default function Home({ feedback, categories, status }) {
                 <Card tailwindStyles={"sm:block bg-white rounded-lg"}>
                   <div className="flex justify-between mb-2">
                     <h3 className="font-bold text-md text-dark-grey">Roadmap</h3>
-                    <a href="/roadmap" className="underline text-sm text-dark-blue hover:text-light-blue">
+                    <Link href="/roadmap" className="underline text-sm text-dark-blue hover:text-light-blue">
                       View
-                    </a>
+                    </Link>
                   </div>
                   <div>
                     <div className="flex justify-between mb-1 text-light-slate">
@@ -224,7 +223,7 @@ export default function Home({ feedback, categories, status }) {
           <div className="md:w-3/4">
             <Card tailwindStyles={"sm:rounded-lg bg-slate text-white"}>
               <div className="flex items-center">
-                <Image src="images/bulb.svg" width={24} height={24} alt="Bulb" className="mr-4 hidden lg:block" />
+                <Image src="/images/bulb.svg" width={24} height={24} alt="Bulb" className="mr-4 hidden lg:block" />
                 <p className="mr-6 font-bold hidden sm:block">{feedbackData?.length} Suggestions</p>
                 <div className="flex items-center">
                   <label id="sortBy" className="hidden sm:inline-block">

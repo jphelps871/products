@@ -18,7 +18,7 @@ export default function UpvoteButton({ value, roadmap, feedbackId, upvoteData })
         }
       });
     }
-  }, [user]);
+  }, [user, upvoteData]);
 
   const handleOnClick = async (event) => {
     event.preventDefault();

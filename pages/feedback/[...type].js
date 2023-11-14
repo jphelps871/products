@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 
-export default function feedback() {
+export default function Feedback() {
   const [feedbackCharacters, setFeedbackCharacters] = useState(0);
   const [detailCharacters, setDetailCharacters] = useState(0);
   const [categories, setCategories] = useState([]);
@@ -52,7 +52,7 @@ export default function feedback() {
     } else {
       setLoading(false);
     }
-  }, [feedbackId]);
+  }, [feedbackId, type, reset]);
 
   function handleClickSubmit(event) {
     event.preventDefault();

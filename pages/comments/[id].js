@@ -60,7 +60,7 @@ export default function CommentPage({ feedbackData }) {
       setComments(comments);
       setLoading(false);
     });
-  }, []);
+  }, [feedback.id]);
 
   const channel = supabase
     .channel("schema-db-changes")
