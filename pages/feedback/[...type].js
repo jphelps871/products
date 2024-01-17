@@ -19,6 +19,8 @@ export default function Feedback() {
   const path = usePreviousUrlLocation();
 
   const router = useRouter();
+
+  // Page either creates or edits products, below is the logic for deciding
   const [type, feedbackId] = router?.query?.type || ["", ""];
 
   const {
@@ -28,7 +30,7 @@ export default function Feedback() {
     reset,
   } = useForm();
 
-  // Add information to the form
+  // display information for editing data
   useEffect(() => {
     getCategory()
       .then((response) => setCategories(response.data))
@@ -54,6 +56,7 @@ export default function Feedback() {
     }
   }, [feedbackId, type, reset]);
 
+  // Create or edit information
   function handleClickSubmit(event) {
     event.preventDefault();
     const method = event.target.name;
@@ -62,6 +65,8 @@ export default function Feedback() {
     handleSubmit(async (data) => {
       const response = await sendFeedback(method, data, feedbackId);
       toast.success(response.message);
+
+      // This needs to re-fetch data, not only return to home
       router.push(path);
     })();
   }

@@ -11,7 +11,7 @@ import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import React, { useState } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const categories = await prisma.category.findMany();
   const feedback = await prisma.feedback.findMany({
     select: allFeedback,
