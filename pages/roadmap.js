@@ -61,13 +61,13 @@ export default function Roadmap({ feedbackData }) {
       {/* Tabs for mobile */}
       <div className="flex justify-evenly sm:hidden">
         <button onClick={() => setActiveTab("planned")} className={`w-full px-2 py-5 font-bold text-dark-grey text-sm ${createActiveTab("planned", "orange")}`}>
-          Planned ({feedbackData.planned.length})
+          Planned ({feedbackData?.planned?.length || "0"})
         </button>
         <button onClick={() => setActiveTab("inProgress")} className={`w-full px-2 py-5 font-bold text-dark-grey text-sm ${createActiveTab("inProgress", "dark-purple")}`}>
-          In-Progress ({feedbackData.inProgress.length})
+          In-Progress ({feedbackData?.inProgress?.length || "0"})
         </button>
         <button onClick={() => setActiveTab("live")} className={`w-full px-2 py-5 font-bold text-dark-grey text-sm ${createActiveTab("live", "light-blue")}`}>
-          Live ({feedbackData.live.length})
+          Live ({feedbackData?.live?.length || "0"})
         </button>
       </div>
 
