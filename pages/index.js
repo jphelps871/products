@@ -261,7 +261,7 @@ export default function Home({ feedback, categories, status }) {
                     <div className="flex justify-center">
                       <div className="my-16 w-1/2">
                         <div className="flex justify-center">
-                          <Image src={"images/nothing-icon.svg"} width={200} height={200} alt={"No feedback Icon"} />
+                          <Image src={"/images/nothing-icon.svg"} width={200} height={200} alt={"No feedback Icon"} />
                         </div>
                         <div className="text-center">
                           <h3 className="font-bold text-xl my-6">There is no feedback yet.</h3>
