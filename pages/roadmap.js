@@ -8,7 +8,7 @@ import prisma from "./api/prisma/prisma";
 import Link from "next/link";
 import { useState } from "react";
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const groupedFeedback = await prisma.status.findMany({
     select: {
       name: true,
