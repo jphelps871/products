@@ -21,14 +21,15 @@ export default function Feedback() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
     watch,
     setValue,
+    setError,
+    formState: { errors },
   } = useForm();
 
   // Update category name based on selected category
-  const watchingCategories = watch("category");
-  const selectedCategory = categories[watchingCategories - 2];
+  const categoryId = watch("category");
+  const selectedCategory = categories.find((item) => item.id === parseInt(categoryId));
 
   useEffect(() => {
     if (!selectedCategory) return;
@@ -51,15 +52,41 @@ export default function Feedback() {
   // Create or edit information
   function handleClickSubmit(event) {
     event.preventDefault();
-    const method = event.target.name;
+    const method = event.target.name; // based on button name (e.g. name="DELETE")
 
-    // Call handleSubmit here to trigger the form submission
+    // Automatically call handleSubmit here to trigger the form submission
     handleSubmit(async (data) => {
-      // const response = await sendFeedback(method, data, feedbackId);
-      toast.success(response.message);
+      const useBody = method === "POST" || method === "PUT";
 
-      // This needs to re-fetch data, not only return to home
-      router.push(path);
+      let url = "/api/category";
+      if (method === "DELETE" || method === "PUT") {
+        url = `/api/category?id=${data.category}`;
+      }
+
+      const options = {
+        method: method,
+        ...(useBody && {
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }),
+      };
+
+      const response = await fetch(url, options);
+      const { errors, message } = await response.json();
+
+      if (errors) {
+        console.log(errors);
+        Object.entries(errors).forEach(([field, messages]) => {
+          setError(field, {
+            type: "server",
+            message: messages[0],
+          });
+        });
+        return;
+      }
+
+      toast.success(message);
+      router.push(path); // re-fetch data and redirect
     })();
   }
 
@@ -82,7 +109,7 @@ export default function Feedback() {
                 <span className="text-dark-grey font-normal block text-sm">Choose a category for your feedback</span>
               </label>
 
-              <select className="mt-3 cursor-pointer rounded-lg p-4 text-md bg-light-cream w-full text-dark-grey" name="category" id="category" {...register("category", { required: true })}>
+              <select className={`mt-3 cursor-pointer rounded-lg p-4 ${errors.category && "border-2 border-red-500"} text-md bg-light-cream w-full text-dark-grey`} name="category" id="category" {...register("category", { required: true })}>
                 <option key={-1} value={-1}>
                   Select a category to edit or delete
                 </option>
@@ -92,6 +119,11 @@ export default function Feedback() {
                   </option>
                 ))}
               </select>
+              {errors.category && (
+                <p className="text-red-500 mt-1" role="alert">
+                  {errors.category?.message}
+                </p>
+              )}
             </div>
           )}
 
@@ -134,14 +166,14 @@ export default function Feedback() {
             </div>
 
             <div>
-              <button onClick={(e) => handleClickSubmit(e)} name={operation === "update" ? "update" : "post"} className="bg-dark-purple sm:px-5 px-4 py-3 hover:opacity-80 text-white rounded-lg font-bold text-sm sm:text-md">
+              <button onClick={(e) => handleClickSubmit(e)} name={operation === "update" ? "PUT" : "POST"} className="bg-dark-purple sm:px-5 px-4 py-3 hover:opacity-80 text-white rounded-lg font-bold text-sm sm:text-md">
                 {operation === "update" ? "Update" : "Add"}
               </button>
             </div>
 
             {operation === "update" && (
               <div className="ml-2">
-                <button onClick={(e) => handleClickSubmit(e)} name="delete" className="bg-red-700 sm:px-5 px-4 py-3 hover:opacity-80 text-white rounded-lg font-bold text-sm sm:text-md">
+                <button onClick={(e) => handleClickSubmit(e)} name="DELETE" className="bg-red-700 sm:px-5 px-4 py-3 hover:opacity-80 text-white rounded-lg font-bold text-sm sm:text-md">
                   Delete
                 </button>
               </div>
