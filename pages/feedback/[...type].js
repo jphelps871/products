@@ -40,7 +40,7 @@ export default function Feedback() {
       getFeedback(feedbackId)
         .then((data) => {
           const feedbackForForm = data.feedback;
-          feedbackForForm.category = feedbackForForm.category.id;
+          feedbackForForm.category = feedbackForForm.category?.id || -1; // -1 set select option to "Select a category"
           feedbackForForm.status = feedbackForForm.status.id;
           reset(feedbackForForm);
 
@@ -116,6 +116,9 @@ export default function Feedback() {
             </label>
 
             <select className="mt-3 cursor-pointer rounded-lg p-4 text-md bg-light-cream w-full text-dark-grey" name="category" id="category" {...register("category", { required: true })}>
+              <option key={-1} value={-1}>
+                Select a category from the dropdown
+              </option>
               {categories.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}

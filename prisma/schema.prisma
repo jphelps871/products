@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  directUrl  = env("DIRECT_DATABASE_URL")
 }
 
 enum Role {
@@ -58,8 +59,8 @@ model Feedback {
   author   User?   @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId String?
 
-  category   Category @relation(fields: [categoryId], references: [id])
-  categoryId Int
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId Int?
 
   status   Status? @relation(fields: [statusId], references: [id])
   statusId Int?

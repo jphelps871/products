@@ -19,7 +19,7 @@ export default function CardFeedback({ feedback, roadmap }) {
         <section className={`grow order-1 col-span-2 ${responsiveClasses && "sm:col-span-1 sm:order-none"}`}>
           <h3 className={`mb-2 text-lg font-bold ${headingColor}`}>{feedback.title}</h3>
           <p className="mb-2 text-light-slate">{feedback.detail}</p>
-          <Button value={feedback.category.name} noHover={true} />
+          <Button value={feedback.category?.name || "none"} noHover={true} />
         </section>
 
         <div className={`flex items-center order-3 ml-auto ${responsiveClasses && "sm:order-none sm:ml-0"}`}>
