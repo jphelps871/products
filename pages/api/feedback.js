@@ -1,6 +1,7 @@
 import prisma from "./prisma/prisma";
 import { allFeedback } from "@/lib/prismaQueries/feedback";
 import * as Validator from "validatorjs";
+import { Filter } from "profanity-check";
 
 // CRUD OPERATIONS
 export default async function handler(req, res) {
@@ -19,25 +20,35 @@ export default async function handler(req, res) {
 
 // Create
 async function createFeedback(req, res) {
-  const body = JSON.parse(req.body);
-
-  // Validation
-  validate(body);
-
-  // Create data for send via Prisma
-  const data = {
-    title: body.title,
-    detail: body.detail,
-    categoryId: parseInt(body.category),
-    statusId: 1, // "Planned"
-    authorId: body.userId,
-  };
+  const body = req.body;
 
   try {
+    // Validation
+    validation(
+      body,
+      {
+        title: "required|max:250",
+        detail: "required|max:450",
+      },
+      {
+        title: "profanity",
+        detail: "profanity",
+      }
+    );
+
+    // Create data for send via Prisma
+    const data = {
+      title: body.title,
+      detail: body.detail,
+      categoryId: parseInt(body.category),
+      statusId: 1, // "Planned"
+      authorId: body.userId,
+    };
+
     await prisma.feedback.create({ data });
     res.status(200).json({ message: "Feedback added" });
   } catch (error) {
-    res.status(400).json({ error });
+    res.status(400).json(error);
   }
 }
 
@@ -141,16 +152,39 @@ async function deleteFeedback(req, res) {
 }
 
 // Helper functions
-function validate(data) {
-  const validation = new Validator(data, {
-    title: "required|max:150",
-    detail: "required|max:450",
-    category: "required",
-  });
+function validation(data, rules, customRules) {
+  let validation = new Validator(data, rules);
 
-  if (validation.fails()) {
-    res.status(400).json(validation.errors);
+  // loop through fields with custom rules
+  for (const field in customRules) {
+    if (!Object.hasOwn(customRules, field)) continue;
+
+    const rulesStr = customRules[field]; // e.g. "profanity|other"
+    const rulesArr = rulesStr.split("|");
+
+    for (const rule of rulesArr) {
+      const value = data[field];
+
+      if (!value) continue;
+
+      // Profanity (Stop swear words)
+      if (rule === "profanity") {
+        const filter = new Filter();
+        if (filter.isProfane(value)) {
+          console.log("working");
+          validation.errors.add(field, "Please refrain from bad words");
+        }
+      }
+    }
   }
+
+  const customValidationFails = Object.keys(validation.errors.all()).length > 0;
+
+  if (validation.fails() || customValidationFails) {
+    throw validation.errors;
+  }
+
+  return data;
 }
 
 function orderResultsBySortByText(results, sortText) {
