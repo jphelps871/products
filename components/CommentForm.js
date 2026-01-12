@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import FeedBackButton from "./FeedBackButton";
 import FormCharactersContainer from "./form/FormCharactersContainer";
 
-export default function CommentForm({ buttonText, commentId }) {
+export default function CommentForm({ buttonText, commentId, onSuccess }) {
   const user = useUser();
   const [feedbackCharacters, setFeedbackCharacters] = useState(0);
   const {
@@ -18,7 +18,7 @@ export default function CommentForm({ buttonText, commentId }) {
     setError,
   } = useForm();
 
-  function handleClickSubmit(event) {
+  function handleClickSubmit() {
     handleSubmit(async (data) => {
       if (!user) {
         toast.error("You must be logged in to comment");
@@ -45,12 +45,16 @@ export default function CommentForm({ buttonText, commentId }) {
           return;
         }
 
-        reset();
+        if (!errors) {
+          reset();
+          onSuccess();
+        }
       }
     })();
   }
 
   const router = useRouter();
+
   // feedback ID - passed into hidden input fields
   const { id } = router.query;
 

@@ -62,37 +62,32 @@ export default function CommentPage({ feedbackData }) {
     });
   }, [feedback.id]);
 
-  const channel = supabase
-    .channel("schema-db-changes")
-    .on(
-      "postgres_changes",
-      {
-        event: "INSERT",
-        schema: "public",
-        table: "Comment",
-      },
-      () => {
-        getComments(feedback.id)
-          .then((data) => {
-            const comments = buildCommentTree(data.comments);
+  function refetchComments() {
+    getComments(feedback.id).then((data) => {
+      const comments = buildCommentTree(data.comments);
+      setComments(comments);
+      setCommentsLength(data.comments.length);
+    });
+  }
 
-            // Update the number of comments shown in feedback component
-            const updatedFeedback = { ...feedback };
-            const updatedComments = [...updatedFeedback.comments];
-            updatedComments.push({ test: "test" });
+  useEffect(() => {
+    const channel = supabase
+      .channel("schema-db-changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "Comment",
+        },
+        () => refetchComments()
+      )
+      .subscribe();
 
-            updatedFeedback.comments = updatedComments;
-            setFeedback(updatedFeedback);
-            setCommentsLength(commentsLength + 1);
-
-            setComments(comments);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-    )
-    .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [feedback.id]);
 
   return (
     <>
@@ -128,7 +123,7 @@ export default function CommentPage({ feedbackData }) {
         <div className="mt-10 mb-20">
           <Card tailwindStyles={"bg-white rounded-lg"}>
             <p className="font-bold text-dark-grey text-xl mb-8 ">Add Comment</p>
-            <CommentForm buttonText={"Post Comment"} feedbackId={feedback.id} />
+            <CommentForm buttonText="Post Comment" feedbackId={feedback.id} onSuccess={refetchComments} />
           </Card>
         </div>
       </div>
