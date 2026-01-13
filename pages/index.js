@@ -120,21 +120,21 @@ export default function Home({ feedback, categories, status }) {
                         <span className="mr-2 w-2 h-2 rounded-full bg-orange inline-block"></span>
                         Planned
                       </p>
-                      <p className="font-bold">2</p>
+                      <p className="font-bold">{status[0].feedback.length}</p>
                     </div>
                     <div className="flex justify-between mb-1 text-light-slate">
                       <p className="flex items-center">
                         <span className="mr-2 w-2 h-2 rounded-full bg-dark-purple inline-block"></span>
                         In-Progress
                       </p>
-                      <p className="font-bold">3</p>
+                      <p className="font-bold">{status[1].feedback.length}</p>
                     </div>
                     <div className="flex justify-between mb-1 text-light-slate">
                       <p className="flex items-center">
                         <span className="mr-2 w-2 h-2 rounded-full bg-light-blue inline-block"></span>
                         Live
                       </p>
-                      <p className="font-bold">1</p>
+                      <p className="font-bold">{status[2].feedback.length}</p>
                     </div>
                   </div>
                 </Card>

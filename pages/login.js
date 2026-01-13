@@ -183,7 +183,7 @@ export default function Login() {
           </label>
           <input
             id="password"
-            type={displayLogin ? "password" : "text"}
+            type="password"
             className={`bg-light-cream mt-3 p-3 w-full rounded-lg ${errors.password && "border-2 border-red-500"}`}
             {...register("password", {
               required: "Password is required",

@@ -46,8 +46,10 @@ export default function CommentForm({ buttonText, commentId, onSuccess }) {
         }
 
         if (!errors) {
+          toast.success("Comment sent ✉️");
+
           reset();
-          onSuccess();
+          onSuccess(); // calls refreshComments function
         }
       }
     })();

@@ -115,7 +115,7 @@ export default function CommentPage({ feedbackData }) {
             <Card tailwindStyles={"bg-white rounded-lg"}>
               <p className="font-bold text-dark-grey text-xl">{commentsLength} Comments</p>
 
-              <Comments comments={allComments} />
+              <Comments comments={allComments} refetchComments={refetchComments} />
             </Card>
           )}
         </div>
