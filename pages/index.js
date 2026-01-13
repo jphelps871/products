@@ -68,6 +68,7 @@ export default function Home({ feedback, categories, status }) {
 
   // Call API to sort by
   async function sortBy(e) {
+    setLoading(true);
     const name = e.target.value;
 
     const response = await fetch(`api/feedback?sort=${name}`, {
@@ -77,6 +78,7 @@ export default function Home({ feedback, categories, status }) {
     const feedbackBySorting = await response.json();
 
     setFeedbackData(feedbackBySorting.feedback);
+    setLoading(false);
   }
 
   return (
@@ -120,21 +122,21 @@ export default function Home({ feedback, categories, status }) {
                         <span className="mr-2 w-2 h-2 rounded-full bg-orange inline-block"></span>
                         Planned
                       </p>
-                      <p className="font-bold">2</p>
+                      <p className="font-bold">{status[0].feedback.length}</p>
                     </div>
                     <div className="flex justify-between mb-1 text-light-slate">
                       <p className="flex items-center">
                         <span className="mr-2 w-2 h-2 rounded-full bg-dark-purple inline-block"></span>
                         In-Progress
                       </p>
-                      <p className="font-bold">3</p>
+                      <p className="font-bold">{status[1].feedback.length}</p>
                     </div>
                     <div className="flex justify-between mb-1 text-light-slate">
                       <p className="flex items-center">
                         <span className="mr-2 w-2 h-2 rounded-full bg-light-blue inline-block"></span>
                         Live
                       </p>
-                      <p className="font-bold">1</p>
+                      <p className="font-bold">{status[2].feedback.length}</p>
                     </div>
                   </div>
                 </Card>
@@ -229,7 +231,7 @@ export default function Home({ feedback, categories, status }) {
                   <label id="sortBy" className="hidden sm:inline-block">
                     Sort by:
                   </label>
-                  <select onMouseUp={(e) => sortBy(e)} name="sortBy" className="inline-flex justify-center gap-x-1.5 rounded-lg px-3 py-2 text-md font-semibold bg-transparent">
+                  <select onChange={(e) => sortBy(e)} name="sortBy" className="inline-flex justify-center gap-x-1.5 rounded-lg px-3 py-2 text-md font-semibold bg-transparent">
                     <option value="Most Upvotes">Most Upvotes</option>
                     <option value="Least Upvotes">Least Upvotes</option>
                     <option value="Most Comments">Most Comments</option>

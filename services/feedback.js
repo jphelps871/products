@@ -13,11 +13,11 @@ export async function feedback(method, data, feedbackId) {
     route = `/api/feedback?feedbackId=${feedbackId}`;
   } else if (method === "post") {
     options["method"] = "POST";
-    options["headers"] = { Accept: "application/json" };
+    options["headers"] = { "Content-Type": "application/json" };
     options["body"] = JSON.stringify(data);
   } else if (method === "update") {
     options["method"] = "PUT";
-    options["headers"] = { Accept: "application/json" };
+    options["headers"] = { "Content-Type": "application/json" };
     data["feedbackId"] = parseInt(feedbackId);
 
     options["body"] = JSON.stringify(data);

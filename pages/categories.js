@@ -75,7 +75,6 @@ export default function Feedback() {
       const { errors, message } = await response.json();
 
       if (errors) {
-        console.log(errors);
         Object.entries(errors).forEach(([field, messages]) => {
           setError(field, {
             type: "server",

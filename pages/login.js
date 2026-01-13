@@ -102,7 +102,7 @@ export default function Login() {
   return (
     <FormContainer iconPath={"/images/login.svg"} IconAlt={"User login icon"}>
       {/* oAuth login */}
-      <div className="w-full">
+      {/* <div className="w-full">
         <button onClick={() => onProviderAuth("google")} className="border-2 border-dark-grey w-full rounded-lg py-3 px-2 flex items-center justify-center hover:border-white hover:bg-dark-grey hover:text-white">
           <svg xmlns="http://www.w3.org/2000/svg" className="w-6" viewBox="0 0 326667 333333" shapeRendering="geometricPrecision" textRendering="geometricPrecision" imageRendering="optimizeQuality" fillRule="evenodd" clipRule="evenodd">
             <path d="M326667 170370c0-13704-1112-23704-3518-34074H166667v61851h91851c-1851 15371-11851 38519-34074 54074l-311 2071 49476 38329 3428 342c31481-29074 49630-71852 49630-122593m0 0z" fill="#4285f4" />
@@ -112,7 +112,7 @@ export default function Login() {
           </svg>
           <p className="ml-2">Sign up with Google</p>
         </button>
-      </div>
+      </div> */}
 
       {/* Standard login */}
       <form autoComplete="off" className="mt-8" onSubmit={handleSubmit(onFormSubmit)}>
@@ -183,7 +183,7 @@ export default function Login() {
           </label>
           <input
             id="password"
-            type={displayLogin ? "password" : "text"}
+            type="password"
             className={`bg-light-cream mt-3 p-3 w-full rounded-lg ${errors.password && "border-2 border-red-500"}`}
             {...register("password", {
               required: "Password is required",

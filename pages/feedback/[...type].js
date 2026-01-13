@@ -28,6 +28,7 @@ export default function Feedback() {
     handleSubmit,
     formState: { errors },
     reset,
+    setError,
   } = useForm();
 
   // display information for editing data
@@ -63,8 +64,19 @@ export default function Feedback() {
 
     // Call handleSubmit here to trigger the form submission
     handleSubmit(async (data) => {
-      const response = await sendFeedback(method, data, feedbackId);
-      toast.success(response.message);
+      const { errors, message } = await sendFeedback(method, data, feedbackId);
+
+      if (errors) {
+        Object.entries(errors).forEach(([field, messages]) => {
+          setError(field, {
+            type: "server",
+            message: messages[0],
+          });
+        });
+        return;
+      }
+
+      toast.success(message);
 
       // This needs to re-fetch data, not only return to home
       router.push(path);

@@ -1,5 +1,5 @@
 import prisma from "./prisma/prisma";
-import * as Validator from "validatorjs";
+import validation from "@/services/validation";
 
 export default async function handler(req, res) {
   if (req.method === "GET") {
@@ -19,15 +19,21 @@ export default async function handler(req, res) {
 
   if (req.method === "POST") {
     try {
-      const validated = validation(req.body, {
-        name: "required|max:20",
-      });
+      const validated = validation(
+        req.body,
+        {
+          name: "required|max:20",
+        },
+        {
+          name: "profanity", // custom rule
+        }
+      );
 
       const created = await prisma.category.create({ data: validated });
 
       res.status(200).json({ message: `${created.name} added to categories` });
     } catch (error) {
-      res.status(400).json({ data: error });
+      res.status(400).json(error);
     }
   }
 
@@ -41,7 +47,7 @@ export default async function handler(req, res) {
 
       res.status(200).json({ message: `${deleted.name} deleted` });
     } catch (error) {
-      res.status(400).json({ data: error });
+      res.status(400).json(error);
     }
   }
 
@@ -66,17 +72,7 @@ export default async function handler(req, res) {
         return res.status(400).json({ errors: { name: ["Category name already exists"] } });
       }
 
-      return res.status(400).json({ data: error });
+      return res.status(400).json(error);
     }
-  }
-
-  function validation(data, rules) {
-    const validation = new Validator(data, rules);
-
-    if (validation.fails()) {
-      return res.status(400).json(validation.errors);
-    }
-
-    return data;
   }
 }

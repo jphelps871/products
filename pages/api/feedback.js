@@ -1,6 +1,6 @@
 import prisma from "./prisma/prisma";
 import { allFeedback } from "@/lib/prismaQueries/feedback";
-import * as Validator from "validatorjs";
+import validation from "@/services/validation";
 
 // CRUD OPERATIONS
 export default async function handler(req, res) {
@@ -19,43 +19,63 @@ export default async function handler(req, res) {
 
 // Create
 async function createFeedback(req, res) {
-  const body = JSON.parse(req.body);
-
-  // Validation
-  validate(body);
-
-  // Create data for send via Prisma
-  const data = {
-    title: body.title,
-    detail: body.detail,
-    categoryId: parseInt(body.category),
-    statusId: 1, // "Planned"
-    authorId: body.userId,
-  };
-
   try {
+    const body = req.body;
+
+    // Validation
+    validation(
+      body,
+      {
+        title: "required|max:250",
+        detail: "required|max:450",
+      },
+      {
+        title: "profanity",
+        detail: "profanity",
+      }
+    );
+
+    // Create data for send via Prisma
+    const data = {
+      title: body.title,
+      detail: body.detail,
+      categoryId: parseInt(body.category),
+      statusId: 1, // "Planned"
+      authorId: body.userId,
+    };
+
     await prisma.feedback.create({ data });
     res.status(200).json({ message: "Feedback added" });
   } catch (error) {
-    res.status(400).json({ error });
+    res.status(400).json(error);
   }
 }
 
 // Put
 async function updateFeedback(req, res) {
-  const body = JSON.parse(req.body);
-
-  // Validation
-  validate(body);
-
-  const data = {
-    title: body.title,
-    detail: body.detail,
-    categoryId: parseInt(body.category),
-    statusId: parseInt(body.status),
-  };
-
   try {
+    const body = req.body;
+
+    // Validation
+    validation(
+      body,
+      {
+        title: "required|max:250",
+        detail: "required|max:450",
+      },
+      {
+        title: "profanity",
+        detail: "profanity",
+      }
+    );
+
+    const data = {
+      title: body.title,
+      detail: body.detail,
+      categoryId: parseInt(body.category),
+      statusId: parseInt(body.status),
+    };
+
     await prisma.feedback.update({
       where: {
         id: body.feedbackId,
@@ -65,7 +85,7 @@ async function updateFeedback(req, res) {
 
     res.status(200).json({ message: "Feedback updated" });
   } catch (error) {
-    res.status(400).json({ error });
+    res.status(400).json(error);
   }
 }
 
@@ -138,19 +158,6 @@ async function deleteFeedback(req, res) {
   }
 
   res.status(200).json({ message: "Feedback deleted" });
-}
-
-// Helper functions
-function validate(data) {
-  const validation = new Validator(data, {
-    title: "required|max:150",
-    detail: "required|max:450",
-    category: "required",
-  });
-
-  if (validation.fails()) {
-    res.status(400).json(validation.errors);
-  }
 }
 
 function orderResultsBySortByText(results, sortText) {
