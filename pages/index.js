@@ -68,6 +68,7 @@ export default function Home({ feedback, categories, status }) {
 
   // Call API to sort by
   async function sortBy(e) {
+    setLoading(true);
     const name = e.target.value;
 
     const response = await fetch(`api/feedback?sort=${name}`, {
@@ -77,6 +78,7 @@ export default function Home({ feedback, categories, status }) {
     const feedbackBySorting = await response.json();
 
     setFeedbackData(feedbackBySorting.feedback);
+    setLoading(false);
   }
 
   return (
@@ -229,7 +231,7 @@ export default function Home({ feedback, categories, status }) {
                   <label id="sortBy" className="hidden sm:inline-block">
                     Sort by:
                   </label>
-                  <select onMouseUp={(e) => sortBy(e)} name="sortBy" className="inline-flex justify-center gap-x-1.5 rounded-lg px-3 py-2 text-md font-semibold bg-transparent">
+                  <select onChange={(e) => sortBy(e)} name="sortBy" className="inline-flex justify-center gap-x-1.5 rounded-lg px-3 py-2 text-md font-semibold bg-transparent">
                     <option value="Most Upvotes">Most Upvotes</option>
                     <option value="Least Upvotes">Least Upvotes</option>
                     <option value="Most Comments">Most Comments</option>
