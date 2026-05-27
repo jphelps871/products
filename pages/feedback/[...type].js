@@ -15,7 +15,8 @@ export default function Feedback() {
   const [feedbackCharacters, setFeedbackCharacters] = useState(0);
   const [detailCharacters, setDetailCharacters] = useState(0);
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const path = usePreviousUrlLocation();
 
   const router = useRouter();
@@ -51,14 +52,16 @@ export default function Feedback() {
         })
 
         .catch((error) => console.error(error))
-        .finally(() => setLoading(false));
+        .finally(() => setInitialLoading(false));
     } else {
-      setLoading(false);
+      setInitialLoading(false);
     }
   }, [feedbackId, type, reset]);
 
   // Create or edit information
   function handleClickSubmit(event) {
+    setSubmitting(true);
+
     event.preventDefault();
     const method = event.target.name;
 
@@ -85,7 +88,7 @@ export default function Feedback() {
 
   return (
     <FormContainer heading={`${type === "create" ? "Create New Feedback" : "Edit Feedback"}`} iconPath={"/images/plus-icon.svg"} IconAlt={"Plus icon"}>
-      {loading || categories.length == 0 ? (
+      {initialLoading || categories.length == 0 ? (
         <div className="flex justify-center">
           <ClipLoader aria-label="Loading Spinner" data-testid="loader" />
         </div>
@@ -189,7 +192,7 @@ export default function Feedback() {
             {type === "edit" && (
               <div className="mr-auto">
                 <FeedBackButton submit handleClick={(e) => handleClickSubmit(e)} name={"delete"} bgColor={"bg-danger-red"}>
-                  Delete
+                  {submitting ? "Loading..." : "Delete"}
                 </FeedBackButton>
               </div>
             )}
@@ -200,8 +203,8 @@ export default function Feedback() {
               </Link>
             </div>
             <div>
-              <button onClick={(e) => handleClickSubmit(e)} name={type === "create" ? "post" : "update"} className={`bg-dark-purple sm:px-5 px-4 py-3 hover:opacity-80 text-white rounded-lg font-bold text-sm sm:text-md`}>
-                {type === "create" ? "Add Feedback" : "Edit Feedback"}
+              <button onClick={(e) => handleClickSubmit(e)} disabled={submitting} name={type === "create" ? "post" : "update"} className={`bg-dark-purple sm:px-5 px-4 py-3 hover:opacity-80 text-white rounded-lg font-bold text-sm sm:text-md disabled:opacity-40 disabled:cursor-not-allowed`}>
+                {submitting ? "Loading..." : type === "create" ? "Add Feedback" : "Edit Feedback"}
               </button>
             </div>
           </div>

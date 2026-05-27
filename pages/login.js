@@ -8,12 +8,14 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { Tooltip } from "react-tooltip";
 import { useState } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
 
 export default function Login() {
   const supabase = useSupabaseClient();
   const router = useRouter();
   const [unknownError, setUnknownError] = useState("");
   const [displayLogin, setDisplayLogin] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -65,6 +67,8 @@ export default function Login() {
   };
 
   const onFormSubmit = async (userData) => {
+    setLoading(true);
+
     if (displayLogin) {
       signInWithEmail(userData);
       return;
@@ -125,9 +129,9 @@ export default function Login() {
         )}
 
         <p className="text-md mb-3">
-          Have an account?{" "}
+          {displayLogin ? "No account?" : "Have an account?"}
           <span onClick={() => setDisplayLogin(!displayLogin)} className="font-bold text-dark-purple cursor-pointer">
-            {displayLogin ? "Sign up" : "Log in"}
+            {displayLogin ? " Sign up" : " Log in"}
           </span>
         </p>
 
@@ -205,8 +209,8 @@ export default function Login() {
         </div>
 
         <div>
-          <button type="submit" className={`bg-dark-purple sm:px-5 px-4 py-3 hover:opacity-80 text-white rounded-lg font-bold text-sm sm:text-md`}>
-            {displayLogin ? "Log in" : "Sign Up"}
+          <button type="submit" disabled={loading} className={`bg-dark-purple sm:px-5 px-4 py-3 hover:opacity-80 text-white rounded-lg font-bold text-sm sm:text-md disabled:opacity-40 disabled:cursor-not-allowed`}>
+            {loading ? "Loading..." : displayLogin ? "Log in" : "Sign Up"}
           </button>
 
           {!displayLogin && (
